@@ -1,5 +1,7 @@
+import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
-import 'package:edupass_mobile/screens/home_screen.dart';
+import 'package:edupass_mobile/screens/edupass_app.dart';
+import 'package:edupass_mobile/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,27 +25,29 @@ class RegisterScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Edu",
-                            style: GoogleFonts.poppins(
-                              color: Colors.blue,
-                              fontSize: 42,
-                              fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 24.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Edu",
+                              style: GoogleFonts.poppins(
+                                color: Colors.blue,
+                                fontSize: 42,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Pass",
-                            style: GoogleFonts.poppins(
-                              color: Colors.red[400],
-                              fontSize: 42,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              "Pass",
+                              style: GoogleFonts.poppins(
+                                color: Colors.red[400],
+                                fontSize: 42,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(height: 24),
                       TextField(
@@ -53,7 +57,7 @@ class RegisterScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Colors.blue.shade50,
+                          fillColor: Colors.grey.shade50,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -65,7 +69,7 @@ class RegisterScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Colors.blue.shade50,
+                          fillColor: Colors.grey.shade50,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -77,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Colors.blue.shade50,
+                          fillColor: Colors.grey.shade50,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -88,11 +92,11 @@ class RegisterScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
+                                  builder: (context) => ChooseRoleScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurpleAccent,
+                            backgroundColor: Colors.indigo,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
