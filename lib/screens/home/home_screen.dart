@@ -1,6 +1,7 @@
 import 'package:edupass_mobile/components/event_card.dart';
 import 'package:edupass_mobile/navigations/bottom_nav_bar.dart';
-import 'package:edupass_mobile/screens/scan_qr_screen.dart';
+import 'package:edupass_mobile/screens/home/components/filter_dialog.dart';
+import 'package:edupass_mobile/screens/scan_qr/scan_qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,7 +38,17 @@ class HomeScreen extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Placeholder',
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: const Icon(Icons.tune),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.tune),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => const FilterSheet(),
+                    );
+                  },
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -46,21 +57,22 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             // Register Event Card
             Card(
+              color: Colors.indigo,
               child: ListTile(
                 leading: Image.asset(
                     'assets/images/event_image.png'), // Adjust image asset
                 title: const Text(
                   'Let\'s Register Your First Event!',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 trailing: ElevatedButton(
                   onPressed: () {},
                   child: const Text('Register Event',
-                      style: TextStyle(fontSize: 12)),
+                      style: TextStyle(fontSize: 12, color: Colors.black)),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             // Event Cards
             Expanded(
               child: ListView(
@@ -98,20 +110,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Handle FAB action here
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ScanQrCode()),
-          );
-        },
-        backgroundColor: Colors
-            .deepPurpleAccent[200], // Customize the background color if needed
-        child: const Icon(Icons.qr_code_scanner,
-            color: Colors.white), // QR scan icon
-      ),
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

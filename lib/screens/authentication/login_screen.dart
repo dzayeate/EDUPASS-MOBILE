@@ -1,5 +1,7 @@
+import 'package:edupass_mobile/screens/authentication/forget_password/forget_password.dart';
 import 'package:edupass_mobile/screens/authentication/register_screen.dart';
-import 'package:edupass_mobile/screens/home_screen.dart';
+import 'package:edupass_mobile/screens/edupass_app.dart';
+import 'package:edupass_mobile/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,7 +25,6 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 50),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -53,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Colors.blue.shade50,
+                          fillColor: Colors.grey.shade50,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -65,18 +66,25 @@ class LoginScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Colors.blue.shade50,
+                          fillColor: Colors.grey.shade50,
                         ),
                       ),
                       SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgetPassword(),
+                              ),
+                            );
+                          },
                           child: Text(
-                            'Forgot your password?',
+                            'Forgot Password',
                             style: GoogleFonts.poppins(
-                              color: Colors.blue,
+                              color: Colors.black,
                             ),
                           ),
                         ),
@@ -89,11 +97,11 @@ class LoginScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
+                                  builder: (context) => EduPassApp()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurpleAccent,
+                            backgroundColor: Colors.indigo,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),

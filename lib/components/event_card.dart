@@ -1,3 +1,4 @@
+import 'package:edupass_mobile/screens/home/detail_comp.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -102,12 +103,18 @@ class EventCard extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailCompScreen()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black, // Background color
+                        backgroundColor: Colors.indigo, // Background color
                       ),
                       child: const Text(
-                        'Button Label',
+                        'View Details',
                         style: TextStyle(
                           color: Colors.white, // Text color
                         ),
