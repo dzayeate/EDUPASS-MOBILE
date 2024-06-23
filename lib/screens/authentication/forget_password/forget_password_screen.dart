@@ -1,10 +1,23 @@
-import 'package:edupass_mobile/screens/authentication/forget_password/success_reset_password.dart';
-import 'package:edupass_mobile/screens/home/home_screen.dart';
+import 'package:edupass_mobile/controllers/auth/forgot_password_controller.dart';
+import 'package:edupass_mobile/screens/components/custom_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgetPassword extends StatelessWidget {
+class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
+
+  @override
+  State<ForgetPassword> createState() => _ForgetPasswordState();
+}
+
+class _ForgetPasswordState extends State<ForgetPassword> {
+  late ForgetPasswordController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ForgetPasswordController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,27 +78,23 @@ class ForgetPassword extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 24),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Masukkan Email Anda',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
+                      CustomFormField(
+                        controller: _controller.emailController,
+                        labelText: 'Email',
+                        validator: emailValidator,
                       ),
                       SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SuccessResetPassword()),
-                            );
+                            _controller.forgetPassword(context);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           const SuccessResetPassword()),
+                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.indigo,

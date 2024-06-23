@@ -1,12 +1,24 @@
-import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
+import 'package:edupass_mobile/controllers/auth/register_controller.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
-import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/screens/home/home_screen.dart';
+import 'package:edupass_mobile/screens/components/custom_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final RegisterController _registerController = RegisterController();
+
+  @override
+  void dispose() {
+    _registerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +43,7 @@ class RegisterScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Edu",
+                              "Akun",
                               style: GoogleFonts.poppins(
                                 color: Colors.blue,
                                 fontSize: 42,
@@ -49,58 +61,76 @@ class RegisterScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: 24),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
+                      const SizedBox(height: 24),
+                      CustomFormField(
+                        controller: _registerController.emailController,
+                        labelText: 'Email',
+                        validator: emailValidator,
                       ),
-                      SizedBox(height: 20),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
+                      const SizedBox(height: 20),
+                      CustomFormField(
+                        controller: _registerController.passwordController,
+                        labelText: 'Password',
+                        isPassword: true,
+                        validator: passwordValidator,
                       ),
-                      SizedBox(height: 20),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Confirm Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
+                      const SizedBox(height: 20),
+                      CustomFormField(
+                        controller:
+                            _registerController.confirmPasswordController,
+                        labelText: 'Confirm Password',
+                        isPassword: true,
+                        validator: (value) => confirmPasswordValidator(
+                            value, _registerController.passwordController.text),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChooseRoleScreen()),
-                            );
+                            final emailError = emailValidator(
+                                _registerController.emailController.text);
+                            final passwordError = passwordValidator(
+                                _registerController.passwordController.text);
+                            final confirmPasswordError =
+                                confirmPasswordValidator(
+                                    _registerController
+                                        .confirmPasswordController.text,
+                                    _registerController
+                                        .passwordController.text);
+
+                            if (emailError == null &&
+                                passwordError == null &&
+                                confirmPasswordError == null) {
+                              _registerController.register(context);
+                            }
+
+                            // Validasi dan simpan data dari RegisterScreen ke RegisterController
+                            // _registerController.addFirstStepData(
+                            //   email: _registerController.emailController.text
+                            //       .trim(),
+                            //   password: _registerController
+                            //       .passwordController.text
+                            //       .trim(),
+                            //   confirmPassword: _registerController
+                            //       .confirmPasswordController.text
+                            //       .trim(),
+                            // );
+
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => const EduPassApp()
+                            //       // ChooseRoleScreen()
+                            //       ),
+                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.indigo,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           child: Text(
                             'Sign Up',
@@ -112,7 +142,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       Center(
                         child: Text(
                           'Atau Lanjutkan Dengan',
@@ -122,7 +152,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -130,14 +160,14 @@ class RegisterScreen extends StatelessWidget {
                             icon: Image.asset('assets/images/google.png'),
                             onPressed: () {},
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           IconButton(
                             icon: Image.asset('assets/images/facebook.png'),
                             onPressed: () {},
                           ),
                         ],
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

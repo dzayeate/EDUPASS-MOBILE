@@ -54,6 +54,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Add back button functionality here
+            Navigator.pop(context);
           },
         ),
         title: Row(

@@ -1,12 +1,25 @@
-import 'package:edupass_mobile/screens/authentication/forget_password/forget_password.dart';
+import 'package:edupass_mobile/controllers/auth/login_controller.dart';
+import 'package:edupass_mobile/screens/authentication/forget_password/forget_password_screen.dart';
 import 'package:edupass_mobile/screens/authentication/register_screen.dart';
-import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/screens/home/home_screen.dart';
+import 'package:edupass_mobile/screens/components/custom_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late LoginController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = LoginController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,30 +59,20 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 24),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
+                      const SizedBox(height: 24),
+                      CustomFormField(
+                        controller: _controller.emailController,
+                        labelText: 'Email',
+                        validator: emailValidator,
                       ),
-                      SizedBox(height: 20),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
+                      const SizedBox(height: 20),
+                      CustomFormField(
+                        controller: _controller.passwordController,
+                        labelText: 'Password',
+                        isPassword: true,
+                        validator: passwordValidator,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -77,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ForgetPassword(),
+                                builder: (context) => const ForgetPassword(),
                               ),
                             );
                           },
@@ -89,16 +92,17 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EduPassApp()),
-                            );
+                            _controller.login(context);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => EduPassApp()),
+                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.indigo,
@@ -117,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       Center(
                         child: Text(
                           'Atau Lanjutkan Dengan',
@@ -127,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -135,14 +139,14 @@ class LoginScreen extends StatelessWidget {
                             icon: Image.asset('assets/images/google.png'),
                             onPressed: () {},
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           IconButton(
                             icon: Image.asset('assets/images/facebook.png'),
                             onPressed: () {},
                           ),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

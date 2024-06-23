@@ -1,3 +1,5 @@
+import 'package:edupass_mobile/screens/comp_registration/comp_regis_mhs.dart';
+import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/home/components/detail_comp_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,6 +42,12 @@ class _DetailCompScreenState extends State<DetailCompScreen>
             icon: Icon(Ionicons.arrow_back, color: Colors.black),
             onPressed: () {
               // Handle back button press
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EduPassApp(initialPageIndex: 0),
+                ),
+              );
             },
           ),
         ),
@@ -224,6 +232,12 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                       child: ElevatedButton(
                         onPressed: () {
                           // Handle join now button press
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CompetitionMhsRegis()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(

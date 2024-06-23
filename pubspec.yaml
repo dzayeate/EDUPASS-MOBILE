@@ -50,6 +50,12 @@ dependencies:
   share_plus: ^6.2.0
   path_provider: ^2.0.11
 
+  # api
+  dio: ^5.4.3+1
+  get: ^4.6.6
+  http: ^1.2.1
+
+
   # navbar
   curved_navigation_bar: ^1.0.6
   animated_bottom_navigation_bar: ^1.3.3
