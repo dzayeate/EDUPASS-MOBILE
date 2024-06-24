@@ -1,12 +1,18 @@
+import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/utils/event_card.dart';
-import 'package:edupass_mobile/navigations/bottom_nav_bar.dart';
-import 'package:edupass_mobile/screens/home/components/filter_dialog.dart';
-import 'package:edupass_mobile/screens/scan_qr/scan_qr_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Make sure to adjust this import based on your file structure
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class CalendarCompetition extends StatefulWidget {
+  @override
+  _CalendarCompetitionState createState() => _CalendarCompetitionState();
+}
+
+class _CalendarCompetitionState extends State<CalendarCompetition> {
+  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -14,66 +20,60 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EduPassApp(initialPageIndex: 1),
+              ),
+            );
+          },
+        ),
         title: Text(
-          'Hi, Dzikry!',
+          'Calendar Competitions',
           style: GoogleFonts.poppins(
             color: Colors.black,
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Search Bar
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Placeholder',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.tune),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => const FilterSheet(),
-                    );
-                  },
+            TableCalendar(
+              firstDay: DateTime.utc(2020, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              },
+              calendarFormat: CalendarFormat.month,
+              calendarStyle: CalendarStyle(
+                todayDecoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  shape: BoxShape.circle,
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Register Event Card
-            Card(
-              color: Colors.indigo,
-              child: ListTile(
-                leading: Image.asset(
-                    'assets/images/event_image.png'), // Adjust image asset
-                title: const Text(
-                  'Let\'s Register Your First Event!',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                trailing: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Register Event',
-                      style: TextStyle(fontSize: 12, color: Colors.black)),
+                selectedDecoration: BoxDecoration(
+                  color: Colors.indigo,
+                  shape: BoxShape.circle,
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            // Event Cards
+            const SizedBox(height: 12.0),
             Expanded(
               child: ListView(
                 children: const [

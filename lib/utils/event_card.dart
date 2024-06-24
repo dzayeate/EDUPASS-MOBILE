@@ -1,4 +1,5 @@
 import 'package:edupass_mobile/screens/home/detail_comp.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -7,6 +8,7 @@ class EventCard extends StatelessWidget {
   final String date;
   final String location;
   final String imageUrl;
+  final String peopleRegistered;
   final String label;
   final String label2;
 
@@ -16,6 +18,7 @@ class EventCard extends StatelessWidget {
     required this.date,
     required this.location,
     required this.imageUrl,
+    required this.peopleRegistered,
     required this.label,
     required this.label2,
   });
@@ -100,6 +103,14 @@ class EventCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.people_alt_sharp, size: 16),
+                      const SizedBox(width: 8),
+                      Text(peopleRegistered),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

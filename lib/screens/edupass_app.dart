@@ -1,5 +1,7 @@
 import 'package:edupass_mobile/navigations/bottom_nav_bar.dart';
+import 'package:edupass_mobile/screens/calendar_competitions/calendar_competitions.dart';
 import 'package:edupass_mobile/screens/home/home_screen.dart';
+import 'package:edupass_mobile/screens/list_competitions/list_competitions.dart';
 import 'package:edupass_mobile/screens/profile/components/profile_text_field.dart';
 import 'package:edupass_mobile/screens/profile/education/education_screen.dart';
 import 'package:edupass_mobile/screens/profile/profile_user.dart';
@@ -28,11 +30,11 @@ class _EduPassAppState extends State<EduPassApp> {
   }
 
   final List<Widget> _pages = [
-    HomeScreen(),
-    EducationScreen(),
-    ScanQrCode(),
-    SettingScreen(),
-    ProfileUser(),
+    const HomeScreen(),
+    const ListCompetitions(),
+    const ScanQrCode(),
+    CalendarCompetition(),
+    const ProfileUser(),
   ];
 
   @override

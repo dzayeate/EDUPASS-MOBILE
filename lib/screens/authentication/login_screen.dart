@@ -98,11 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             _controller.login(context);
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => EduPassApp()),
-                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.indigo,

@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static String? token;
 
+// forget password
   Future<bool> forgetPassword({
     required String email,
   }) async {
@@ -36,6 +38,7 @@ class AuthService {
     }
   }
 
+// login
   Future<bool> login({
     required String email,
     required String password,
@@ -58,6 +61,10 @@ class AuthService {
           Map<String, dynamic> responseData = response.data;
           Map<String, dynamic> data = responseData['data'];
           token = data['token'];
+
+          // Simpan token ke SharedPreferences
+          await saveToken(token!);
+
           return true;
         } else {
           throw Exception('Failed to parse data');
@@ -78,6 +85,7 @@ class AuthService {
     }
   }
 
+// register
   Future<bool> register({
     required String email,
     required String password,
@@ -140,8 +148,83 @@ class AuthService {
       }
     }
   }
-}
 
+// logout
+  Future<void> logout() async {
+    String? token = await getToken();
+    try {
+      var response = await Dio().post(
+        "http://192.168.1.5:3000/auth/logout",
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        // Hapus token dari SharedPreferences
+        await deleteToken();
+      } else {
+        throw Exception('Failed to logout');
+      }
+    } on DioException catch (e) {
+      debugPrint('Error: ${e.toString()}');
+      throw Exception('Failed to logout');
+    }
+  }
+
+// change password
+  Future<void> changePassword() async {
+    String? token = await getToken();
+    try {
+      var response = await Dio().post(
+        "http://192.168.1.5:3000/auth/change-password",
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        // Hapus token dari SharedPreferences
+        await deleteToken();
+      } else {
+        throw Exception('Failed to change password');
+      }
+    } on DioException catch (e) {
+      debugPrint('Error: ${e.toString()}');
+      throw Exception('Failed to change password');
+    }
+  }
+
+  Future<void> saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+  Future<void> deleteToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
+
+  Future<bool> isLoggedIn() async {
+    String? token = await getToken();
+    return token != null;
+  }
+
+  // Fungsi untuk memeriksa token
+  Future<void> checkToken() async {
+    String? token = await getToken();
+    debugPrint('Token yang tersimpan: $token');
+  }
+}
 
 //   Future<bool> register({
 //     required String email,
