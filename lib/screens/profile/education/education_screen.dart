@@ -1,6 +1,5 @@
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/screens/profile/profile_user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,7 +21,7 @@ class EducationScreen extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => EduPassApp(initialPageIndex: 4),
+                builder: (context) => const EduPassApp(initialPageIndex: 4),
               ),
             );
           },

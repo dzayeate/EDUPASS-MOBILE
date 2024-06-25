@@ -1,18 +1,11 @@
+import 'package:edupass_mobile/screens/authentication/change_password/change_password.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/screens/profile/profile_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:go_router/go_router.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:intl/intl.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class SettingScreen extends StatelessWidget {
+  const SettingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,40 +13,49 @@ class SettingScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(CupertinoIcons.back, color: Colors.black),
+          icon: const Icon(CupertinoIcons.back, color: Colors.black),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => EduPassApp(initialPageIndex: 4),
+                builder: (context) => const EduPassApp(initialPageIndex: 4),
               ),
             );
           },
         ),
-        title: Text('Settings', style: TextStyle(color: Colors.black)),
+        title: const Text('Settings', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       body: Container(
         color: Colors.white,
         child: ListView(
           children: [
-            _buildSettingsOption('Account Privacy'),
-            _buildSettingsOption('Change Password'),
-            _buildSettingsOption('Delete Account'),
-            _buildSettingsOption('Tags/Interest'),
-            _buildSettingsOption('Sosial Media'),
+            _buildSettingsOption(context, 'Account Privacy'),
+            _buildSettingsOption(context, 'Change Password'),
+            _buildSettingsOption(context, 'Delete Account'),
+            _buildSettingsOption(context, 'Tags/Interest'),
+            _buildSettingsOption(context, 'Social Media'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSettingsOption(String title) {
+  Widget _buildSettingsOption(BuildContext context, String title) {
     return ListTile(
       title: Text(title),
-      trailing: Icon(CupertinoIcons.forward),
+      trailing: const Icon(CupertinoIcons.forward),
       onTap: () {
         // Navigate to respective page
+        if (title == 'Change Password') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ChangePasswordScreen()),
+          );
+        } else {
+          // Handle other options
+        }
       },
     );
   }

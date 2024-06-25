@@ -2,10 +2,8 @@ import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/profile/components/dropdown_field.dart';
 import 'package:edupass_mobile/screens/profile/components/profile_text_field.dart';
 import 'package:edupass_mobile/screens/profile/components/upload_bg_field.dart';
-import 'package:edupass_mobile/screens/profile/profile_user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileDetailUser extends StatelessWidget {
   const ProfileDetailUser({super.key});

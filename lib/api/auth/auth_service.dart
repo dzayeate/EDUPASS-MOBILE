@@ -175,21 +175,30 @@ class AuthService {
   }
 
 // change password
-  Future<void> changePassword() async {
+  Future<bool> changePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
     String? token = await getToken();
     try {
       var response = await Dio().post(
-        "http://192.168.1.5:3000/auth/change-password",
+        "http://192.168.1.5:3000/user/change-password",
         options: Options(
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer $token",
           },
         ),
+        data: {
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+          "confirmPassword": confirmPassword,
+        },
       );
       if (response.statusCode == 200) {
         // Hapus token dari SharedPreferences
-        await deleteToken();
+        return true;
       } else {
         throw Exception('Failed to change password');
       }

@@ -1,15 +1,10 @@
-import 'package:edupass_mobile/navigations/bottom_nav_bar.dart';
+import 'package:edupass_mobile/navigation/bottom_nav_bar.dart';
 import 'package:edupass_mobile/screens/calendar_competitions/calendar_competitions.dart';
 import 'package:edupass_mobile/screens/home/home_screen.dart';
 import 'package:edupass_mobile/screens/list_competitions/list_competitions.dart';
-import 'package:edupass_mobile/screens/profile/components/profile_text_field.dart';
-import 'package:edupass_mobile/screens/profile/education/education_screen.dart';
 import 'package:edupass_mobile/screens/profile/profile_user.dart';
-import 'package:edupass_mobile/screens/profile/profile_user_detail.dart';
-import 'package:edupass_mobile/screens/profile/settings/setting_screen.dart';
 import 'package:edupass_mobile/screens/scan_qr/scan_qr_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class EduPassApp extends StatefulWidget {
   final int initialPageIndex;

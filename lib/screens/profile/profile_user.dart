@@ -5,9 +5,6 @@ import 'package:edupass_mobile/screens/profile/education/education_screen.dart';
 import 'package:edupass_mobile/screens/profile/profile_user_detail.dart';
 import 'package:edupass_mobile/screens/profile/settings/setting_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
 class ProfileUser extends StatelessWidget {

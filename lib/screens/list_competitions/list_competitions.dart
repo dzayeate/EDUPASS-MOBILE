@@ -1,9 +1,5 @@
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/utils/event_card.dart';
-import 'package:edupass_mobile/navigations/bottom_nav_bar.dart';
-import 'package:edupass_mobile/screens/home/components/filter_dialog.dart';
-import 'package:edupass_mobile/screens/scan_qr/scan_qr_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,7 +21,7 @@ class ListCompetitions extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => EduPassApp(initialPageIndex: 1),
+                builder: (context) => const EduPassApp(initialPageIndex: 1),
               ),
             );
           },
