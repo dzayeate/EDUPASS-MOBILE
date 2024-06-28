@@ -1,6 +1,8 @@
 import 'package:edupass_mobile/api/auth/auth_service.dart';
+import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
+import 'package:edupass_mobile/screens/terms_and_condition/TermsConditionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';

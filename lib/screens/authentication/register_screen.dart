@@ -1,6 +1,7 @@
 import 'package:edupass_mobile/controllers/auth/register_controller.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/components/custom_form_field.dart';
+import 'package:edupass_mobile/screens/terms_and_condition/TermsConditionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final RegisterController _registerController = RegisterController();
+  bool _isTermsAccepted = false;
 
   @override
   void dispose() {
@@ -43,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Akun",
+                              "Edu",
                               style: GoogleFonts.poppins(
                                 color: Colors.blue,
                                 fontSize: 42,
@@ -84,10 +86,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             value, _registerController.passwordController.text),
                       ),
                       const SizedBox(height: 20),
+                      Transform.translate(
+                        offset: const Offset(-24, 0),
+                        child: CheckboxListTile(
+                          title: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TermsConditionScreen()),
+                              );
+                            },
+                            child: const Text(
+                              "Terms & Condition",
+                              style: TextStyle(
+                                  color: Colors.indigo, // Warna biru
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Colors.indigo),
+                            ),
+                          ),
+                          value: _isTermsAccepted,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isTermsAccepted = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
+                            if (!_isTermsAccepted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "Please Accept the Terms & Condition"),
+                                ),
+                              );
+                              return;
+                            }
+
                             final emailError = emailValidator(
                                 _registerController.emailController.text);
                             final passwordError = passwordValidator(
