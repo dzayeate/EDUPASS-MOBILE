@@ -1,5 +1,6 @@
 import 'package:edupass_mobile/api/auth/auth_service.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
+import 'package:edupass_mobile/screens/profile/activity/activity_user.dart';
 import 'package:edupass_mobile/screens/profile/certification/certification_screen.dart';
 import 'package:edupass_mobile/screens/profile/education/education_screen.dart';
 import 'package:edupass_mobile/screens/profile/profile_user_detail.dart';
@@ -109,7 +110,7 @@ class ProfileUser extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProfileDetailUser()),
+                            builder: (context) => const ProfileDetailUser()),
                       );
                     },
                   ),
@@ -117,7 +118,11 @@ class ProfileUser extends StatelessWidget {
                     leading: const Icon(Ionicons.list_outline),
                     title: const Text('Activity'),
                     onTap: () {
-                      // Handle activity tap
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ActivityUser()),
+                      );
                     },
                   ),
                   ListTile(
@@ -127,7 +132,7 @@ class ProfileUser extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EducationScreen()),
+                            builder: (context) => const EducationScreen()),
                       );
                     },
                   ),
@@ -149,7 +154,7 @@ class ProfileUser extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SettingScreen()),
+                            builder: (context) => const SettingScreen()),
                       );
                     },
                   ),
@@ -163,7 +168,8 @@ class ProfileUser extends StatelessWidget {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
                       );
                     },
                   ),

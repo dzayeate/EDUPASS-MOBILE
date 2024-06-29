@@ -1,7 +1,7 @@
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/profile/components/dropdown_field.dart';
 import 'package:edupass_mobile/screens/profile/components/profile_text_field.dart';
-import 'package:edupass_mobile/screens/profile/components/upload_bg_field.dart';
+import 'package:edupass_mobile/screens/profile/components/upload_image_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -57,7 +57,12 @@ class ProfileDetailUser extends StatelessWidget {
               enabled: false,
             ),
             const SizedBox(height: 16),
-            const UploadBackgroundField(),
+            UploadImageField(
+              onFileSelected: (filePath) {
+                // Handle file path
+                print('Selected file path: $filePath');
+              },
+            ),
             const SizedBox(height: 16),
             const DropdownField(
               label: 'Provinsi',
