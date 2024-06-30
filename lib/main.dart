@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/',
           builder: (context, state) =>
-              loggedIn ? const EduPassApp() : const ProfileUser(),
+              loggedIn ? const EduPassApp() : const LoginScreen(),
         ),
         // Add other routes here
         GoRoute(
