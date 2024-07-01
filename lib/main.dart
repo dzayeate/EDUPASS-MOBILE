@@ -1,4 +1,5 @@
 import 'package:edupass_mobile/api/auth/auth_service.dart';
+import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/authentication/registration_role/general_regis_screen.dart';
@@ -13,7 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  bool loggedIn = await AuthService().isLoggedIn();
+  bool loggedIn = await TokenManager().isLoggedIn();
 
   runApp(MyApp(loggedIn: loggedIn));
 }

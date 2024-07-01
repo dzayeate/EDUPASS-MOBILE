@@ -1,4 +1,5 @@
-import 'package:edupass_mobile/api/auth/auth_service.dart';
+import 'package:edupass_mobile/api/shared_preferences/biodate_manager.dart';
+import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/profile/activity/activity_user.dart';
 import 'package:edupass_mobile/screens/profile/certification/certification_screen.dart';
@@ -163,7 +164,9 @@ class ProfileUser extends StatelessWidget {
                     title: const Text('Log Out'),
                     onTap: () async {
                       // await AuthService().logout();
-                      await AuthService().deleteToken();
+                      // await AuthService().deleteToken();
+                      await TokenManager().deleteToken();
+                      await BiodateIdManager().deleteBiodateId();
                       // context.go('/');
 
                       Navigator.push(

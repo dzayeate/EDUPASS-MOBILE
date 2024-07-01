@@ -1,4 +1,5 @@
 import 'package:edupass_mobile/api/auth/auth_service.dart';
+import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/utils/dialog_helper.dart';
 import 'package:edupass_mobile/models/auth/registration_model.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
@@ -11,31 +12,27 @@ class RegisterController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController roleNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController nikController = TextEditingController();
+  TextEditingController uniqueIdController = TextEditingController();
   TextEditingController institutionNameController = TextEditingController();
   TextEditingController institutionLevelController = TextEditingController();
   TextEditingController provinceController = TextEditingController();
   TextEditingController regenciesController = TextEditingController();
   TextEditingController studyFieldController = TextEditingController();
-  TextEditingController reasonController = TextEditingController();
 
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
-    roleNameController.dispose();
     firstNameController.dispose();
     lastNameController.dispose();
-    nikController.dispose();
+    uniqueIdController.dispose();
     institutionNameController.dispose();
     institutionLevelController.dispose();
     provinceController.dispose();
     regenciesController.dispose();
     studyFieldController.dispose();
-    reasonController.dispose();
     // Dispose other controllers
   }
 
@@ -95,7 +92,11 @@ class RegisterController {
       if (loggedIn) {
         // Navigate ke halaman setelah register sukses (contoh: EduPassApp)
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EduPassApp()));
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Register Successful, Please Log In'),
+          duration: Duration(seconds: 2),
+        ));
         print('register successful');
       } else {
         // Menampilkan pesan kesalahan jika register gagal

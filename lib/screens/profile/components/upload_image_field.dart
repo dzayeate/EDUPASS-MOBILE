@@ -17,11 +17,7 @@ class _UploadImageFieldState extends State<UploadImageField> {
   void _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: [
-        'jpg',
-        'jpeg',
-        'png',
-      ],
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
     );
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.first;
@@ -46,7 +42,7 @@ class _UploadImageFieldState extends State<UploadImageField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Upload foto',
+          'Upload Background Foto',
           style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -60,9 +56,9 @@ class _UploadImageFieldState extends State<UploadImageField> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade400),
+              border: Border.all(color: Colors.grey.shade600),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
