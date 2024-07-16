@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:edupass_mobile/api/auth/auth_service.dart';
 import 'package:edupass_mobile/models/auth/update_user_model.dart';
 import 'package:edupass_mobile/utils/dialog_helper.dart';
@@ -16,11 +18,40 @@ class UpdateUserController {
   TextEditingController addressController = TextEditingController();
   TextEditingController provinceController = TextEditingController();
   TextEditingController regenciesController = TextEditingController();
-  TextEditingController imageController = TextEditingController();
   TextEditingController institutionNameController = TextEditingController();
   TextEditingController studyFieldController = TextEditingController();
   TextEditingController uniqueIdController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
   TextEditingController proofController = TextEditingController();
+
+  String? _selectedImagePath;
+  String? _selectedProofPath;
+
+  void setImagePath(String filePath) {
+    _selectedImagePath = filePath;
+    debugPrint('Selected image path set: $_selectedImagePath');
+  }
+
+  void setProofPath(String filePath) {
+    _selectedProofPath = filePath;
+    debugPrint('Selected proof path set: $_selectedProofPath');
+  }
+
+  void reset() {
+    _selectedImagePath = null;
+    _selectedProofPath = null;
+    firstNameController.clear();
+    lastNameController.clear();
+    birthDateController.clear();
+    genderController.clear();
+    phoneController.clear();
+    addressController.clear();
+    provinceController.clear();
+    regenciesController.clear();
+    institutionNameController.clear();
+    studyFieldController.clear();
+    uniqueIdController.clear();
+  }
 
   void dispose() {
     firstNameController.dispose();
@@ -31,17 +62,16 @@ class UpdateUserController {
     addressController.dispose();
     provinceController.dispose();
     regenciesController.dispose();
-    addressController.dispose();
-    imageController.dispose();
     institutionNameController.dispose();
     studyFieldController.dispose();
     uniqueIdController.dispose();
-    proofController.dispose();
-    // Dispose other controllers
+  }
+
+  bool fileExists(String path) {
+    return File(path).existsSync();
   }
 
   Future<void> updateBio(BuildContext context) async {
-    // Tampilkan loading dialog
     DialogHelper.showLoading(context);
 
     String firstName = firstNameController.text.trim();
@@ -53,10 +83,12 @@ class UpdateUserController {
     String province = provinceController.text.trim();
     String regencies = regenciesController.text.trim();
     String institutionName = institutionNameController.text.trim();
-    String image = imageController.text.trim();
     String studyField = studyFieldController.text.trim();
     String uniqueId = uniqueIdController.text.trim();
-    String proof = proofController.text.trim();
+    // String? image = imageController.text.trim();
+    // String? proof = proofController.text.trim();
+    String? image = _selectedImagePath;
+    String? proof = _selectedProofPath;
 
     try {
       bool bioUpdated = await _authService.updateBio(
@@ -69,42 +101,40 @@ class UpdateUserController {
         province: province,
         regencies: regencies,
         institutionName: institutionName,
-        image: image,
         field: studyField,
         pupils: uniqueId,
+        image: image,
         proof: proof,
       );
-      // Sembunyikan loading dialog setelah selesai
       DialogHelper.hideLoading(context);
 
       if (bioUpdated) {
-        // Navigate ke halaman setelah UpdateBio sukses (contoh: EduPassApp)
+        reset();
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const EduPassApp(
                       initialPageIndex: 4,
                     )));
-        debugPrint('UpdateBio successful');
-      } else {
-        // Menampilkan pesan kesalahan jika UpdateBio gagal
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('UpdateBio failed'),
+          content: Text('UpdateBio berhasil'),
+          duration: Duration(seconds: 1),
+        ));
+        debugPrint('UpdateBio berhasil');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('UpdateBio gagal'),
           duration: Duration(seconds: 2),
         ));
-        debugPrint('UpdateBio failed');
+        debugPrint('UpdateBio gagal');
       }
     } catch (e) {
-      // Sembunyikan loading dialog jika terjadi exception
       DialogHelper.hideLoading(context);
-
-      // Tangani exception yang mungkin terjadi
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Error: $e'),
         duration: const Duration(seconds: 2),
       ));
-
-      debugPrint('Error during UpdateBio: $e');
+      debugPrint('Error saat UpdateBio: $e');
     }
   }
 }

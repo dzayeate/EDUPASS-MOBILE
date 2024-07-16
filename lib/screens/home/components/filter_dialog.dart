@@ -1,3 +1,6 @@
+import 'package:edupass_mobile/controllers/auth/login_controller.dart';
+import 'package:edupass_mobile/controllers/auth/update_user_controller.dart';
+import 'package:edupass_mobile/screens/profile/components/profile_date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,11 +20,19 @@ class _FilterSheetState extends State<FilterSheet> {
   bool jawaBaratLocation = false;
   bool jawaTengahLocation = false;
 
+  late UpdateUserController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = UpdateUserController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -29,7 +40,7 @@ class _FilterSheetState extends State<FilterSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Filter',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
@@ -107,6 +118,14 @@ class _FilterSheetState extends State<FilterSheet> {
             },
           ),
           const SizedBox(height: 16),
+          ProfileDateField(
+            label: 'Select Date',
+            placeholder: 'YYYY-MM-DD',
+            controller: _controller.birthDateController,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

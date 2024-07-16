@@ -1,5 +1,5 @@
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
-import 'package:edupass_mobile/screens/components/custom_upload_file.dart';
+import 'package:edupass_mobile/screens/components/upload_file_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,6 +11,16 @@ class CompetitionMhsRegis extends StatefulWidget {
 }
 
 class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
+  String? _selectedFilePath;
+
+  void _handleFileSelected(String filePath) {
+    setState(() {
+      _selectedFilePath = filePath;
+      // add controller
+    });
+    debugPrint('File path: $filePath');
+  }
+
   bool isInfoChecked = false;
   bool isAgreeChecked = false;
   List<Widget> anggotaFields = [];
@@ -51,8 +61,8 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
             ),
             const SizedBox(height: 16),
             const CustomTextField(
-              labelText: 'NIM',
-              hintText: 'Insert NIM',
+              labelText: 'NIS',
+              hintText: 'Insert NIS',
               readOnly: false,
             ),
             const SizedBox(height: 16),
@@ -138,9 +148,8 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
               ),
             ),
             const SizedBox(height: 16),
-            const CustomUploadFile(
-              hintText: 'Proposal',
-            ),
+            UploadFileField(onFileSelected: _handleFileSelected),
+            const SizedBox(height: 24),
             const SizedBox(height: 24),
             CheckboxListTile(
               title: const Text(

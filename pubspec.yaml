@@ -55,10 +55,18 @@ dependencies:
   # file upload
   file_picker: ^5.2.2
 
+  # image picker
+  image_picker: ^0.8.5+3
+
+  # provider
+  provider: ^6.1.2
+
   # api
   dio: ^5.4.3+1
   get: ^4.6.6
   http: ^1.2.1
+  http_parser: ^4.0.0
+  mime: ^1.0.0
 
   # keep login
   shared_preferences: ^2.2.3

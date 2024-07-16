@@ -130,7 +130,9 @@ class DescriptionTab extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Icon(Icons.person, size: 20), // Adjust the size if needed
+                    Icon(Icons.person,
+                        color: Colors.indigo,
+                        size: 20), // Adjust the size if needed
                     SizedBox(width: 8),
                     Text(
                       'Nama mentor',
@@ -141,7 +143,9 @@ class DescriptionTab extends StatelessWidget {
                 SizedBox(height: 10), // Add spacing between the rows
                 Row(
                   children: [
-                    Icon(Icons.person, size: 20), // Adjust the size if needed
+                    Icon(Icons.person,
+                        color: Colors.indigo,
+                        size: 20), // Adjust the size if needed
                     SizedBox(width: 8),
                     Text(
                       'Nama mentor',
@@ -158,7 +162,9 @@ class DescriptionTab extends StatelessWidget {
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.people, size: 20), // Adjust the size if needed
+                    Icon(Icons.people,
+                        color: Colors.indigo,
+                        size: 20), // Adjust the size if needed
                     SizedBox(width: 8),
                     Text(
                       'Organizer',
@@ -169,7 +175,9 @@ class DescriptionTab extends StatelessWidget {
                 SizedBox(height: 10), // Add spacing between the rows
                 Row(
                   children: [
-                    Icon(Icons.people, size: 20), // Adjust the size if needed
+                    Icon(Icons.people,
+                        color: Colors.indigo,
+                        size: 20), // Adjust the size if needed
                     SizedBox(width: 8),
                     Text(
                       'Organizer',

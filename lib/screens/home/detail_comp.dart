@@ -1,4 +1,4 @@
-import 'package:edupass_mobile/screens/comp_registration/comp_regis_mhs.dart';
+import 'package:edupass_mobile/screens/competition_task/comp_registration/comp_regis_mhs.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/home/components/detail_comp_tab.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +39,13 @@ class _DetailCompScreenState extends State<DetailCompScreen>
           foregroundColor: Colors.black,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Ionicons.arrow_back, color: Colors.black),
+            icon: const Icon(Ionicons.arrow_back, color: Colors.black),
             onPressed: () {
               // Handle back button press
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EduPassApp(initialPageIndex: 0),
+                  builder: (context) => const EduPassApp(initialPageIndex: 0),
                 ),
               );
             },
@@ -74,7 +74,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                        horizontal: 12,
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
@@ -89,10 +89,10 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                        horizontal: 16,
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
@@ -109,43 +109,55 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   'NSPACE 2024: UI/UX COMPETITION',
                   style: GoogleFonts.poppins(
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'KOMINFO',
                   style: GoogleFonts.poppins(
                       fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
-                    Icon(Ionicons.calendar_outline, color: Colors.indigo),
-                    SizedBox(width: 8),
+                    const Icon(Ionicons.calendar_outline, color: Colors.indigo),
+                    const SizedBox(width: 8),
                     Text(
                       '11 Juli 2024',
                       style: GoogleFonts.poppins(fontSize: 16),
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Ionicons.location_outline, color: Colors.indigo),
-                    SizedBox(width: 8),
+                    const Icon(Ionicons.location_outline, color: Colors.indigo),
+                    const SizedBox(width: 8),
                     Text(
                       'Bandung',
                       style: GoogleFonts.poppins(fontSize: 16),
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.people, color: Colors.indigo),
+                    const SizedBox(width: 8),
+                    Text(
+                      '50 Orang Terdaftar',
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   decoration: BoxDecoration(
                     color: Colors.white, // Change background color to white
                     borderRadius: BorderRadius.circular(8),
@@ -154,7 +166,8 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         color: Colors.grey.withOpacity(0.5), // Grey shadow
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),
@@ -167,7 +180,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                   ),
                 ),
 
-                SizedBox(height: 28),
+                const SizedBox(height: 28),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
@@ -194,9 +207,14 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     // Memperluas indikator ke ukuran tab
                   ),
                 ),
+
+                // Pemisahan Garis bawah tab dengan scrollable tab
+                const SizedBox(
+                  height: 12,
+                ),
                 SizedBox(
                   height:
-                      400, // Specify a height for TabBarView to make it scrollable
+                      500, // Specify a height for TabBarView to make it scrollable
                   child: TabBarView(
                     controller: _tabController,
                     children: const [
@@ -205,7 +223,8 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     ],
                   ),
                 ),
-                SizedBox(height: 16), // Add some spacing before the buttons
+                const SizedBox(
+                    height: 16), // Add some spacing before the buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -215,19 +234,21 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: IconButton(
-                        icon: Icon(Ionicons.share_social, color: Colors.black),
+                        icon: const Icon(Ionicons.share_social,
+                            color: Colors.black),
                         onPressed: () {
                           // Handle share button press
                         },
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        constraints: BoxConstraints(),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        constraints: const BoxConstraints(),
                         iconSize: 32,
                         splashColor: Colors.indigo,
                         tooltip: 'Share',
                       ),
                     ),
-                    SizedBox(width: 16), // Add some spacing between the buttons
+                    const SizedBox(
+                        width: 16), // Add some spacing between the buttons
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -240,7 +261,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 12), // Adjust padding here
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),

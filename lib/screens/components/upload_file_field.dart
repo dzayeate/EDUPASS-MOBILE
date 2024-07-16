@@ -4,25 +4,25 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
-// UploadImageField
+// UploadFileField
 
-class UploadImageField extends StatefulWidget {
-  const UploadImageField({super.key, required this.onFileSelected});
+class UploadFileField extends StatefulWidget {
+  const UploadFileField({super.key, required this.onFileSelected});
 
   final void Function(String filePath) onFileSelected;
 
   @override
-  State<UploadImageField> createState() => _UploadImageFieldState();
+  State<UploadFileField> createState() => _UploadFileFieldState();
 }
 
-class _UploadImageFieldState extends State<UploadImageField> {
+class _UploadFileFieldState extends State<UploadFileField> {
   String? _fileName; // Variabel untuk menyimpan nama file
   File? _selectedFile; // Variabel untuk menyimpan data file path
 
   void _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png'],
+      allowedExtensions: ['pdf'],
     );
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.first;
@@ -50,7 +50,7 @@ class _UploadImageFieldState extends State<UploadImageField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Upload Background Foto',
+          'Upload Proposal',
           style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -83,7 +83,7 @@ class _UploadImageFieldState extends State<UploadImageField> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'JPEG, JPG or PNG (max 5MB)',
+                  'PDF (max 5MB)',
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     color: Colors.indigo,

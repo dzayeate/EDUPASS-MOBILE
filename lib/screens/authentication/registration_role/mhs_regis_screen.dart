@@ -1,6 +1,7 @@
 import 'package:edupass_mobile/screens/components/custom_dropdown.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
-import 'package:edupass_mobile/screens/components/custom_upload_file.dart';
+import 'package:edupass_mobile/screens/components/custom_upload_field.dart';
+import 'package:edupass_mobile/screens/components/upload_file_field.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

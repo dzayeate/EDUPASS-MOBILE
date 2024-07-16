@@ -32,7 +32,7 @@ class SettingScreen extends StatelessWidget {
           children: [
             _buildSettingsOption(context, 'Account Privacy'),
             _buildSettingsOption(context, 'Change Password'),
-            _buildSettingsOption(context, 'Delete Account'),
+            // _buildSettingsOption(context, 'Delete Account'),
             _buildSettingsOption(context, 'Tags/Interest'),
             _buildSettingsOption(context, 'Social Media'),
           ],

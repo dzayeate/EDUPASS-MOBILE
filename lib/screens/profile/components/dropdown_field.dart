@@ -22,6 +22,30 @@ class _DropdownFieldState extends State<DropdownField> {
   String? selectedValue;
 
   @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.controller?.text;
+    _checkDuplicates();
+  }
+
+  void _checkDuplicates() {
+    final Set<String> uniqueItems = {};
+    final List<String> duplicates = [];
+
+    for (String item in widget.items) {
+      if (!uniqueItems.add(item)) {
+        duplicates.add(item);
+      }
+    }
+
+    if (duplicates.isNotEmpty) {
+      throw FlutterError(
+        'DropdownField: Duplicate items found in the items list: $duplicates',
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,32 +70,33 @@ class _DropdownFieldState extends State<DropdownField> {
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-                hint: Text(
-                  widget.label,
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
+              hint: Text(
+                widget.label,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
                 ),
-                value: selectedValue,
-                items: widget.items
-                    .map((item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(item,
-                              style: GoogleFonts.poppins(fontSize: 14)),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedValue = value;
-                  });
-                  if (widget.controller != null) {
-                    widget.controller!.text = value ?? '';
-                  }
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(value);
-                  }
-                }),
+              ),
+              value: selectedValue,
+              items: widget.items
+                  .map((item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(item,
+                            style: GoogleFonts.poppins(fontSize: 14)),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedValue = value;
+                });
+                if (widget.controller != null) {
+                  widget.controller!.text = value ?? '';
+                }
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
+              },
+            ),
           ),
         ),
       ],

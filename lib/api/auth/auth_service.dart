@@ -1,8 +1,11 @@
+import 'dart:io';
+import 'package:mime/mime.dart';
 import 'package:dio/dio.dart';
-import 'package:edupass_mobile/api/shared_preferences/biodate_manager.dart';
+import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
 
 class AuthService {
   static String? token;
@@ -159,7 +162,7 @@ class AuthService {
     }
   }
 
-  // Update Bio
+// Update Bio
   Future<bool> updateBio({
     required String firstName,
     required String lastName,
@@ -169,32 +172,62 @@ class AuthService {
     required String address,
     required String province,
     required String regencies,
-    required String image,
     required String institutionName,
     required String pupils,
     required String field,
-    required String proof,
+    String? image,
+    String? proof,
   }) async {
     String? token = await tokenManager.getToken();
     String? bioDateId = await biodateIdManager.getBiodateId();
     try {
+      // Create a Map for form data
+      Map<String, dynamic> formDataMap = {
+        "firstName": firstName,
+        "lastName": lastName,
+        "birthDate": birthDate,
+        "gender": gender,
+        "phone": phone,
+        "address": address,
+        "province": province,
+        "regencies": regencies,
+        "institutionName": institutionName,
+        "field": field,
+        "pupils": pupils,
+      };
+
+      // Get MIME type for the files and add to formDataMap if not null
+      if (proof != null && proof.isNotEmpty) {
+        String? proofMimeType = lookupMimeType(proof);
+        if (proofMimeType != null) {
+          MultipartFile proofMultipartFile = await MultipartFile.fromFile(
+            proof,
+            filename: 'proof.png',
+            contentType: MediaType.parse(proofMimeType),
+          );
+          formDataMap["proof"] = proofMultipartFile;
+        } else {
+          debugPrint('Invalid proof MIME type');
+        }
+      }
+
+      if (image != null && image.isNotEmpty) {
+        String? imageMimeType = lookupMimeType(image);
+        if (imageMimeType != null) {
+          MultipartFile imageMultipartFile = await MultipartFile.fromFile(
+            image,
+            filename: 'image.png',
+            contentType: MediaType.parse(imageMimeType),
+          );
+          formDataMap["image"] = imageMultipartFile;
+        } else {
+          debugPrint('Invalid image MIME type');
+        }
+      }
+
       var response = await Dio().put(
         "http://192.168.1.5:3000/user/update-biodate?id=$bioDateId",
-        data: FormData.fromMap({
-          "firstName": firstName,
-          "lastName": lastName,
-          "birthDate": birthDate,
-          "gender": gender,
-          "phone": phone,
-          "address": address,
-          "province": province,
-          "regencies": regencies,
-          "image": image,
-          "institutionName": institutionName,
-          "field": field,
-          "pupils": pupils,
-          "proof": proof,
-        }),
+        data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {
             "Content-Type": "multipart/form-data",
@@ -203,8 +236,8 @@ class AuthService {
         ),
       );
 
-      if (response.statusCode == 201) {
-        // Registration successful
+      if (response.statusCode == 200) {
+        // Update successful
         return true;
       } else {
         throw Exception('Failed to Update Bio : ${response.data['message']}');
