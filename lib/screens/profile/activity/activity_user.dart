@@ -45,6 +45,8 @@ class ActivityUser extends StatelessWidget {
               child: ListView(
                 children: const [
                   EventCard(
+                    id: "1",
+
                     title: 'NSPACE 2024 : UI/UX COMPETITION',
                     date: '11 Juli 2024',
                     location: 'Kampus FT',
@@ -55,6 +57,8 @@ class ActivityUser extends StatelessWidget {
                         'assets/images/competition_1.png', // Adjust image asset
                   ),
                   EventCard(
+                    id: "1",
+
                     title: 'NSPACE 2024 : Web COMPETITION',
                     date: '11 Juli 2024',
                     location: 'Silicon Valley',
@@ -65,6 +69,8 @@ class ActivityUser extends StatelessWidget {
                         'assets/images/competition_2.png', // Adjust image asset
                   ),
                   EventCard(
+                    id: "1",
+
                     title: 'MObil lejen',
                     date: '11 Juli 2024',
                     location: 'Di rumah',

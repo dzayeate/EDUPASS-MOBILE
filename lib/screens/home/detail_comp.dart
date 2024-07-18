@@ -1,3 +1,4 @@
+import 'package:edupass_mobile/api/competition/get/get_comp_service.dart';
 import 'package:edupass_mobile/screens/competition_task/comp_registration/comp_regis_mhs.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/home/components/detail_comp_tab.dart';
@@ -6,7 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
 class DetailCompScreen extends StatefulWidget {
-  const DetailCompScreen({super.key});
+  final String id;
+
+  const DetailCompScreen({required this.id, super.key});
 
   @override
   State<DetailCompScreen> createState() => _DetailCompScreenState();
@@ -15,11 +18,36 @@ class DetailCompScreen extends StatefulWidget {
 class _DetailCompScreenState extends State<DetailCompScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final GetCompetitionService _competitionService = GetCompetitionService();
+
+  bool _isLoading = true;
+  String? _errorMessage;
+  Map<String, dynamic>? _competitionDetail;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchCompetitionDetail();
+  }
+
+  Future<void> _fetchCompetitionDetail() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final data = await _competitionService.getCompetitionDetail(widget.id);
+      setState(() {
+        _competitionDetail = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -30,11 +58,50 @@ class _DetailCompScreenState extends State<DetailCompScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Loading...', style: GoogleFonts.poppins(fontSize: 20)),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Error', style: GoogleFonts.poppins(fontSize: 20)),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_errorMessage!),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _fetchCompetitionDetail,
+                child: Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Lomba UI UX', style: GoogleFonts.poppins(fontSize: 20)),
+          title: Text(_competitionDetail!['name'],
+              style: GoogleFonts.poppins(fontSize: 20)),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
@@ -82,7 +149,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        'Competition UI/UX',
+                        'Competition',
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.white,
@@ -111,13 +178,13 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'NSPACE 2024: UI/UX COMPETITION',
+                  _competitionDetail!['name'],
                   style: GoogleFonts.poppins(
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'KOMINFO',
+                  _competitionDetail!['description'],
                   style: GoogleFonts.poppins(
                       fontSize: 16, fontWeight: FontWeight.w500),
                 ),
@@ -127,7 +194,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     const Icon(Ionicons.calendar_outline, color: Colors.indigo),
                     const SizedBox(width: 8),
                     Text(
-                      '11 Juli 2024',
+                      _competitionDetail!['date'],
                       style: GoogleFonts.poppins(fontSize: 16),
                     ),
                   ],
@@ -138,7 +205,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     const Icon(Ionicons.location_outline, color: Colors.indigo),
                     const SizedBox(width: 8),
                     Text(
-                      'Bandung',
+                      _competitionDetail!['location'],
                       style: GoogleFonts.poppins(fontSize: 16),
                     ),
                   ],
@@ -217,9 +284,10 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                       500, // Specify a height for TabBarView to make it scrollable
                   child: TabBarView(
                     controller: _tabController,
-                    children: const [
-                      DescriptionTab(),
-                      PrizesTab(),
+                    children: [
+                      DescriptionTab(
+                          description: _competitionDetail!['description']),
+                      const PrizesTab(),
                     ],
                   ),
                 ),

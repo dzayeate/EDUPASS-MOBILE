@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:edupass_mobile/controllers/auth/update_user_controller.dart';
-import 'package:edupass_mobile/controllers/users/ProfileUserController.dart';
+import 'package:edupass_mobile/controllers/users/profile_user_controller.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/error_screen.dart';
 import 'package:edupass_mobile/screens/profile/components/dropdown_field.dart';

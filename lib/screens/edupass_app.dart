@@ -28,7 +28,7 @@ class _EduPassAppState extends State<EduPassApp> {
     const HomeScreen(),
     const ListCompetitions(),
     const ScanQrCode(),
-    CalendarCompetition(),
+    const CalendarCompetition(),
     const ProfileUser(),
   ];
 

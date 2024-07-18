@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EventCard extends StatelessWidget {
+  final String id;
   final String title;
   final String date;
   final String location;
@@ -14,6 +15,7 @@ class EventCard extends StatelessWidget {
 
   const EventCard({
     super.key,
+    required this.id,
     required this.title,
     required this.date,
     required this.location,
@@ -118,8 +120,9 @@ class EventCard extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DetailCompScreen()),
+                              builder: (context) => DetailCompScreen(id: id)),
                         );
+                        debugPrint("ID Carried $id");
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo, // Background color

@@ -1,15 +1,23 @@
+import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/notification/notification_screen.dart';
 import 'package:edupass_mobile/utils/event_card.dart';
 import 'package:edupass_mobile/screens/home/components/filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Fetch competitions when HomeScreen is first built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<GetCompetitionController>(context, listen: false)
+          .fetchCompetitions();
+    });
+
     return WillPopScope(
       onWillPop: () async {
         // Menangani ketika tombol back ditekan
@@ -21,7 +29,7 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Hi, Dzikry!',
+            'Hi, John!',
             style: GoogleFonts.poppins(
               color: Colors.black,
               fontSize: 20,
@@ -46,6 +54,17 @@ class HomeScreen extends StatelessWidget {
             children: [
               // Search Bar
               TextField(
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    Provider.of<GetCompetitionController>(context,
+                            listen: false)
+                        .searchCompetitions(value);
+                  } else {
+                    Provider.of<GetCompetitionController>(context,
+                            listen: false)
+                        .fetchCompetitions();
+                  }
+                },
                 decoration: InputDecoration(
                   hintText: 'Placeholder',
                   prefixIcon: const Icon(Icons.search),
@@ -86,39 +105,57 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 24),
               // Event Cards
               Expanded(
-                child: ListView(
-                  children: const [
-                    EventCard(
-                      title: 'NSPACE 2024 : UI/UX COMPETITION',
-                      date: '11 Juli 2024',
-                      location: 'Kampus FT',
-                      peopleRegistered: '50 Orang Terdaftar',
-                      label: 'Lomba',
-                      label2: 'UI/UX Design',
-                      imageUrl:
-                          'assets/images/competition_1.png', // Adjust image asset
-                    ),
-                    EventCard(
-                      title: 'NSPACE 2024 : Web COMPETITION',
-                      date: '11 Juli 2024',
-                      location: 'Silicon Valley',
-                      peopleRegistered: '50 Orang Terdaftar',
-                      label: 'Lomba',
-                      label2: 'UI/UX Design',
-                      imageUrl:
-                          'assets/images/competition_2.png', // Adjust image asset
-                    ),
-                    EventCard(
-                      title: 'MObil lejen',
-                      date: '11 Juli 2024',
-                      location: 'Di rumah',
-                      peopleRegistered: '50 Orang Terdaftar',
-                      label: 'Lomba',
-                      label2: 'E-sport',
-                      imageUrl:
-                          'assets/images/competition_2.png', // Adjust image asset
-                    ),
-                  ],
+                child: Consumer<GetCompetitionController>(
+                  builder: (context, competitionController, child) {
+                    if (competitionController.isLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (competitionController.errorMessage != null) {
+                      return Center(
+                          child: Text(competitionController.errorMessage!));
+                    }
+
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount:
+                                competitionController.competitions.length,
+                            itemBuilder: (context, index) {
+                              final competition =
+                                  competitionController.competitions[index];
+                              return EventCard(
+                                id: competition['id'],
+                                title: competition['name'],
+                                date: competition['date'],
+                                location: competition['location'],
+                                peopleRegistered:
+                                    '', // Data ini tidak ada di API
+                                label: '', // Data ini tidak ada di API
+                                label2: '', // Data ini tidak ada di API
+                                imageUrl:
+                                    'assets/images/competition_1.png', // Adjust image asset
+                              );
+                            },
+                          ),
+                        ),
+                        if (competitionController.competitions.length <
+                            competitionController.total)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Provider.of<GetCompetitionController>(context,
+                                        listen: false)
+                                    .loadMore();
+                              },
+                              child: Text('Load More'),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],

@@ -1,5 +1,6 @@
 import 'package:edupass_mobile/api/auth/auth_service.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
+import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/authentication/registration_role/general_regis_screen.dart';
@@ -12,6 +13,7 @@ import 'package:edupass_mobile/screens/terms_and_condition/TermsConditionScreen.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,15 +45,18 @@ class MyApp extends StatelessWidget {
       ],
     );
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerDelegate: _router.routerDelegate,
-      routeInformationParser: _router.routeInformationParser,
-      routeInformationProvider: _router.routeInformationProvider,
-      title: 'Edupass',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: GoogleFonts.poppinsTextTheme(),
+    return ChangeNotifierProvider(
+      create: (context) => GetCompetitionController(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerDelegate: _router.routerDelegate,
+        routeInformationParser: _router.routeInformationParser,
+        routeInformationProvider: _router.routeInformationProvider,
+        title: 'MyApp',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.poppinsTextTheme(),
+        ),
       ),
     );
   }

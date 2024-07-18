@@ -1,6 +1,6 @@
 import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
-import 'package:edupass_mobile/controllers/users/ProfileUserController.dart';
+import 'package:edupass_mobile/controllers/users/profile_user_controller.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/error_screen.dart';
 import 'package:edupass_mobile/screens/profile/activity/activity_user.dart';

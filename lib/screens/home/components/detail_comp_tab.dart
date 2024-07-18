@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DescriptionTab extends StatelessWidget {
-  const DescriptionTab({super.key});
+  final String description;
+
+  const DescriptionTab({required this.description, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class DescriptionTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'We are proud to present the UI/UX Competition 2024 which will be held in Bandung! This is a golden opportunity for students to showcase their talent and creativity in user interface and user experience design. Here are the full details of the competition:',
+                  description,
                   style: GoogleFonts.inter(fontSize: 16),
                 ),
                 const SizedBox(height: 8),
