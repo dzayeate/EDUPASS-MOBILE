@@ -1,3 +1,4 @@
+import 'package:edupass_mobile/api/shared_preferences/user_id_manager.dart';
 import 'package:mime/mime.dart';
 import 'package:dio/dio.dart';
 import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
@@ -8,9 +9,11 @@ import 'package:http_parser/http_parser.dart';
 class AuthService {
   static String? token;
   static String? bioDateId;
+  static String? idUser;
 
   final TokenManager tokenManager = TokenManager();
   final BiodateIdManager biodateIdManager = BiodateIdManager();
+  final UserIdManager userIdManager = UserIdManager();
 
 // forget password
   Future<bool> forgetPassword({
@@ -69,12 +72,24 @@ class AuthService {
           Map<String, dynamic> data = responseData['data'];
           token = data['token'];
           bioDateId = data['biodateId'];
+          idUser = data['id'];
 
           // Simpan token ke SharedPreferences
           await tokenManager.saveToken(token!);
 
           // Simpan biodateId ke SharedPreferences
           await biodateIdManager.saveBiodateId(bioDateId!);
+
+          // Simpan token ke SharedPreferences
+          await userIdManager.saveId(idUser!);
+
+          // Verify that biodateId was saved correctly
+          String? savedBiodateId = await biodateIdManager.getBiodateId();
+          debugPrint('Saved BiodateId: $savedBiodateId');
+
+          // Verify that User ID was saved correctly
+          String? savedUserId = await userIdManager.getId();
+          debugPrint('Saved BiodateId: $savedUserId');
 
           return true;
         } else {

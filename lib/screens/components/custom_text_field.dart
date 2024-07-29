@@ -6,12 +6,13 @@ class CustomTextField extends StatelessWidget {
   final bool alignLabelWithHint;
   final int maxLines;
   final bool readOnly;
+  final TextEditingController? controller;
 
-  // ignore: use_super_parameters
   const CustomTextField({
     super.key,
     required this.labelText,
     required this.hintText,
+    this.controller,
     this.alignLabelWithHint = false,
     this.maxLines = 1,
     this.readOnly = false,
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

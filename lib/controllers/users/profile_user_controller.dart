@@ -14,6 +14,7 @@ class ProfileUserController extends ChangeNotifier {
     try {
       final data = await userService.getUserByBiodateId();
       userData = data;
+      debugPrint('Usedata: $userData');
     } catch (e) {
       debugPrint('Error: $e');
     } finally {

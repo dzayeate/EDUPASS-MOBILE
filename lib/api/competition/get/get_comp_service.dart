@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
 class GetCompetitionService {
-// Get All Competition ( Pagination )
   final Dio _dio = Dio();
 
   Future<Map<String, dynamic>> getCompetitions(int page, int length) async {
@@ -24,7 +23,7 @@ class GetCompetitionService {
     }
   }
 
-  // Search Competition
+  // search kompetisi
   Future<Map<String, dynamic>> searchCompetitions(String query) async {
     try {
       final response = await _dio.get(
@@ -46,22 +45,43 @@ class GetCompetitionService {
     }
   }
 
-  // Serach Competition By ID
+  // Filter Search
+  Future<Map<String, dynamic>> searchCompetitionsByFilter(String filter) async {
+    try {
+      final response = await _dio.get(
+        'http://192.168.1.4:3000/competition/findCompetition',
+        queryParameters: {
+          'page': 1,
+          'length': 5,
+          'search': filter,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('Failed to search competitions by filter');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  // Search By Id
   Future<Map<String, dynamic>> getCompetitionDetail(String id) async {
     try {
       final response = await _dio.get(
         'http://192.168.1.4:3000/competition/findCompetition',
         queryParameters: {
           'page': 1,
-          'length': 10,
+          'length': 1,
           'search': id,
         },
       );
 
       if (response.statusCode == 200) {
         if (response.data['data'] != null && response.data['data'].isNotEmpty) {
-          return response.data['data']
-              [0]; // Assuming the first item is the result
+          return response.data['data'][0];
         } else {
           throw Exception('No competition found with the given ID');
         }

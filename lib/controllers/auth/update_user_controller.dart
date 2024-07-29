@@ -90,6 +90,22 @@ class UpdateUserController {
     String? image = _selectedImagePath;
     String? proof = _selectedProofPath;
 
+    // Print the data to debug
+    debugPrint('Updating Bio with data:');
+    debugPrint('First Name: $firstName');
+    debugPrint('Last Name: $lastName');
+    debugPrint('Birth Date: $birthDate');
+    debugPrint('Gender: $gender');
+    debugPrint('Phone: $phone');
+    debugPrint('Address: $address');
+    debugPrint('Province: $province');
+    debugPrint('Regencies: $regencies');
+    debugPrint('Institution Name: $institutionName');
+    debugPrint('Study Field: $studyField');
+    debugPrint('Unique ID: $uniqueId');
+    debugPrint('Image: $image');
+    debugPrint('Proof: $proof');
+
     try {
       bool bioUpdated = await _authService.updateBio(
         firstName: firstName,

@@ -1,5 +1,6 @@
 import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
+import 'package:edupass_mobile/api/shared_preferences/user_id_manager.dart';
 import 'package:edupass_mobile/controllers/users/profile_user_controller.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/error_screen.dart';
@@ -42,58 +43,34 @@ class ProfileUser extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    backgroundImage != null && backgroundImage.isNotEmpty
-                        ? Container(
-                            width: double.infinity,
-                            height: 170,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(backgroundImage),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: IconButton(
-                                  icon: const Icon(Ionicons.arrow_back),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    // Handle back button press
-                                  },
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(
-                            width: double.infinity,
-                            height: 170,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.blueAccent,
-                                  Colors.purpleAccent,
-                                  Colors.orange.shade400,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: IconButton(
-                                  icon: const Icon(Ionicons.arrow_back),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    // Handle back button press
-                                  },
-                                ),
-                              ),
-                            ),
+                    Container(
+                      width: double.infinity,
+                      height: 170,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.blueAccent,
+                            Colors.purpleAccent,
+                            Colors.orange.shade400,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: IconButton(
+                            icon: const Icon(Ionicons.arrow_back),
+                            color: Colors.white,
+                            onPressed: () {
+                              // Handle back button press
+                            },
                           ),
+                        ),
+                      ),
+                    ),
                     Transform.translate(
                       offset: const Offset(0, -50),
                       child: Row(
@@ -126,7 +103,7 @@ class ProfileUser extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${controller.userData?['biodate']['firstName'].isEmpty ?? true ? 'Halo User' : '${controller.userData?['biodate']['firstName']} ${controller.userData?['biodate']['lastName']}' ?? 'Last Name'}',
+                              '${(controller.userData?['biodate']['firstName'].isEmpty ?? true) || (controller.userData?['biodate']['lastName'].isEmpty ?? true) ? 'Halo User' : '${controller.userData?['biodate']['firstName']} ${controller.userData?['biodate']['lastName']}'}',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 24,
@@ -243,6 +220,8 @@ class ProfileUser extends StatelessWidget {
                               // await AuthService().deleteToken();
                               await TokenManager().deleteToken();
                               await BiodateIdManager().deleteBiodateId();
+                              await BiodateIdManager().checkBiodateId();
+                              await UserIdManager().deleteId();
                               // context.go('/');
 
                               Navigator.push(

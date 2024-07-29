@@ -24,6 +24,8 @@ class ProfileDetailUser extends StatefulWidget {
 class _ProfileDetailUserState extends State<ProfileDetailUser> {
   String? _selectedImagePath;
   String? _selectedBackgroundPath;
+  bool _dataInitialized = false;
+
   final UpdateUserController updateController = UpdateUserController();
 
   void _handleImageSelected(String filePath) {
@@ -66,41 +68,36 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
           }
 
           // Initialize UpdateUserController's text controllers with data from ProfileUserController
-          updateController.firstNameController.text =
-              profileController.userData!['biodate']['firstName'] ?? '';
-          updateController.lastNameController.text =
-              profileController.userData!['biodate']['lastName'] ?? '';
-          String birthDate =
-              profileController.userData!['biodate']['birthDate'] ?? '';
-          if (birthDate.isNotEmpty) {
-            updateController.birthDateController.text =
-                birthDate.substring(0, 10); // Format date
-          }
+          if (!_dataInitialized) {
+            updateController.firstNameController.text =
+                profileController.userData!['biodate']['firstName'] ?? '';
+            updateController.lastNameController.text =
+                profileController.userData!['biodate']['lastName'] ?? '';
+            String birthDate =
+                profileController.userData!['biodate']['birthDate'] ?? '';
+            if (birthDate.isNotEmpty) {
+              updateController.birthDateController.text =
+                  birthDate.substring(0, 10); // Format date
+            }
+            updateController.genderController.text =
+                profileController.userData!['biodate']['gender'] ?? '';
+            updateController.phoneController.text =
+                profileController.userData!['biodate']['phone'] ?? '';
+            updateController.addressController.text =
+                profileController.userData!['biodate']['address'] ?? '';
+            updateController.provinceController.text =
+                profileController.userData!['biodate']['province'] ?? '';
+            updateController.regenciesController.text =
+                profileController.userData!['biodate']['regencies'] ?? '';
+            updateController.institutionNameController.text =
+                profileController.userData!['biodate']['institutionName'] ?? '';
+            updateController.studyFieldController.text =
+                profileController.userData!['biodate']['field'] ?? '';
+            updateController.uniqueIdController.text =
+                profileController.userData!['biodate']['pupils'] ?? '';
 
-          updateController.genderController.text =
-              profileController.userData!['biodate']['gender'] ?? '';
-          updateController.phoneController.text =
-              profileController.userData!['biodate']['phone'] ?? '';
-          updateController.addressController.text =
-              profileController.userData!['biodate']['address'] ?? '';
-          updateController.provinceController.text =
-              profileController.userData!['biodate']['province'] ?? '';
-          updateController.regenciesController.text =
-              profileController.userData!['biodate']['regencies'] ?? '';
-          updateController.institutionNameController.text =
-              profileController.userData!['biodate']['institutionName'] ?? '';
-          updateController.studyFieldController.text =
-              profileController.userData!['biodate']['field'] ?? '';
-          updateController.uniqueIdController.text =
-              profileController.userData!['biodate']['pupils'] ?? '';
-          // updateController.imageController.text =
-          //     profileController.userData!['biodate']['image'];
-          // updateController.proofController.text =
-          //     profileController.userData!['biodate']['proof'];
-          // updateController.setImagePath(
-          //     profileController.userData!['biodate']['image'] ?? '');
-          // updateController.setProofPath(
-          //     profileController.userData!['biodate']['proof'] ?? '');
+            _dataInitialized = true;
+          }
 
           return Scaffold(
             appBar: AppBar(

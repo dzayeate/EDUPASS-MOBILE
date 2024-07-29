@@ -9,7 +9,9 @@ class BiodateIdManager {
 
   Future<String?> getBiodateId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('biodateId');
+    String? biodateId = prefs.getString('biodateId');
+    debugPrint('Retrieved BiodateId: $biodateId');
+    return biodateId;
   }
 
   Future<void> deleteBiodateId() async {

@@ -1,3 +1,4 @@
+import 'package:edupass_mobile/controllers/competition/post/register_comp_controller.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
 import 'package:edupass_mobile/screens/components/upload_file_field.dart';
 import 'package:edupass_mobile/screens/profile/components/upload_image_field.dart';
@@ -5,26 +6,49 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CompetitionMhsRegis extends StatefulWidget {
-  const CompetitionMhsRegis({super.key});
+  final String id;
+  const CompetitionMhsRegis({super.key, required this.id});
 
   @override
   State<CompetitionMhsRegis> createState() => _CompetitionMhsRegisState();
 }
 
 class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
+  final RegisterCompetitionController controller =
+      RegisterCompetitionController();
   String? _selectedFilePath;
+  bool isInfoChecked = false;
+  bool isAgreeChecked = false;
+  bool isTeam = false;
+  List<Widget> anggotaFields = [];
+  List<TextEditingController> anggotaControllers = [];
 
   void _handleFileSelected(String filePath) {
     setState(() {
       _selectedFilePath = filePath;
-      // add controller
+      // update controller
+      controller.setFilePath(filePath);
     });
     debugPrint('File path: $filePath');
   }
 
-  bool isInfoChecked = false;
-  bool isAgreeChecked = false;
-  List<Widget> anggotaFields = [];
+  void _addAnggotaField() {
+    TextEditingController newController = TextEditingController();
+    anggotaControllers.add(newController);
+    anggotaFields.add(
+      Column(
+        children: [
+          const SizedBox(height: 16),
+          CustomTextField(
+            labelText: 'Nama Anggota',
+            hintText: 'Nama Anggota',
+            readOnly: false,
+            controller: newController,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,47 +109,25 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
               ),
             ),
             const SizedBox(height: 30),
-            const CustomTextField(
-              labelText: 'Team Leader',
-              hintText: 'Team Leader FullName',
+            CustomTextField(
+              labelText: 'Asal Lokasi',
+              hintText: 'Bandung',
               readOnly: false,
+              controller: controller.domicile,
             ),
             const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'NIM',
-              hintText: 'Insert NIM',
+            CustomTextField(
+              labelText: 'Nomor Handphone',
+              hintText: 'Masukkan Nomor',
               readOnly: false,
+              controller: controller.phoneNumber,
             ),
-            const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Domicile',
-              hintText: 'Enter the domicile',
-              readOnly: false,
-            ),
-            const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Email',
-              hintText: 'Email',
-              readOnly: false,
-            ),
-            const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Agency Name',
-              hintText: 'Enter The Name of The Agency',
-              readOnly: false,
-            ),
-            const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Agency Domicile',
-              hintText: 'Agency Domicile',
-              readOnly: false,
-            ),
-            const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Program Studi',
-              hintText: 'Nama Program Studi',
-              readOnly: false,
-            ),
+            const SizedBox(height: 30),
+            UploadFileField(onFileSelected: _handleFileSelected),
+            const SizedBox(height: 24),
+            if (_selectedFilePath != null) ...[
+              Text('Selected file: $_selectedFilePath'),
+            ],
             const SizedBox(height: 16),
             const CustomTextField(
               labelText: 'Nama Tim',
@@ -133,56 +135,54 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
               readOnly: false,
             ),
             const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Jumlah Anggota',
-              hintText: 'Jumlah Anggota',
-              readOnly: false,
+            Row(
+              children: [
+                const Text('Registrasi sebagai tim'),
+                Checkbox(
+                  value: isTeam,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isTeam = value ?? false;
+                    });
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Nama Anggota',
-              hintText: 'Nama Anggota',
-              readOnly: false,
-            ),
-            Column(
-              children: anggotaFields,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  anggotaFields.add(
-                    const Column(
-                      children: [
-                        SizedBox(
-                          height: 16,
-                        ),
-                        CustomTextField(
-                          labelText: 'Nama Anggota',
-                          hintText: 'Nama Anggota',
-                          readOnly: false,
-                        ),
-                      ],
-                    ),
-                  );
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            if (isTeam) ...[
+              CustomTextField(
+                labelText: 'Jumlah Anggota',
+                hintText: 'Jumlah Anggota',
+                readOnly: false,
+                controller: controller.teamSize,
+              ),
+              const SizedBox(height: 16),
+              Column(
+                children: anggotaFields,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _addAnggotaField();
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Tambah anggota',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              child: const Text(
-                'Tambah anggota',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            ],
             const SizedBox(height: 24),
             // CustomUploadFile(
             //   hintText: 'Proposal',
             // ),
-            UploadFileField(onFileSelected: _handleFileSelected),
+
             const SizedBox(height: 24),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +234,11 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
             ElevatedButton(
               onPressed: () {
                 if (isInfoChecked && isAgreeChecked) {
-                  Navigator.pop(context);
+                  Navigator.pop(
+                    context,
+                  );
+                  controller.register(context, widget.id, isTeam,
+                      anggotaFields.length, anggotaControllers);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

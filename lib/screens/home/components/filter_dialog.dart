@@ -1,8 +1,10 @@
 import 'package:edupass_mobile/controllers/auth/login_controller.dart';
 import 'package:edupass_mobile/controllers/auth/update_user_controller.dart';
+import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/profile/components/profile_date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FilterSheet extends StatefulWidget {
   const FilterSheet({super.key});
@@ -12,20 +14,56 @@ class FilterSheet extends StatefulWidget {
 }
 
 class _FilterSheetState extends State<FilterSheet> {
-  bool uiUxDesignerType = false;
-  bool websiteType = false;
-  bool uiUxDesignerTopic = false;
-  bool websiteTopic = false;
+  bool webCategory = false;
+  bool uiUxCategory = false;
+  bool mobileCategory = false;
+  bool zoomPlatform = false;
+  bool gmeetPlatform = false;
   bool jakartaLocation = false;
-  bool jawaBaratLocation = false;
-  bool jawaTengahLocation = false;
+  bool bandungLocation = false;
+  bool yogyakartaLocation = false;
 
-  late UpdateUserController _controller;
+  late TextEditingController _dateController;
 
   @override
   void initState() {
     super.initState();
-    _controller = UpdateUserController();
+    _dateController = TextEditingController();
+  }
+
+  void _resetOtherCheckboxes(String selected) {
+    setState(() {
+      if (selected != 'webCategory') webCategory = false;
+      if (selected != 'uiUxCategory') uiUxCategory = false;
+      if (selected != 'mobileCategory') mobileCategory = false;
+      if (selected != 'zoomPlatform') zoomPlatform = false;
+      if (selected != 'gmeetPlatform') gmeetPlatform = false;
+      if (selected != 'jakartaLocation') jakartaLocation = false;
+      if (selected != 'bandungLocation') bandungLocation = false;
+      if (selected != 'yogyakartaLocation') yogyakartaLocation = false;
+    });
+  }
+
+  void _applyFilter() {
+    String filter = '';
+    if (webCategory) filter = 'web';
+    if (uiUxCategory) filter = 'ui/ux';
+    if (mobileCategory) filter = 'mobile';
+    if (zoomPlatform) filter = 'zoom';
+    if (gmeetPlatform) filter = 'gmeet';
+    if (jakartaLocation) filter = 'Jakarta';
+    if (bandungLocation) filter = 'Bandung';
+    if (yogyakartaLocation) filter = 'Yogyakarta';
+
+    String date = _dateController.text;
+    if (date.isNotEmpty) {
+      filter = date;
+    }
+
+    debugPrint('Selected filter: $filter');
+
+    Provider.of<GetCompetitionController>(context, listen: false)
+        .fetchFilteredCompetitions(filter);
   }
 
   @override
@@ -46,43 +84,58 @@ class _FilterSheetState extends State<FilterSheet> {
           ),
           const SizedBox(height: 16),
           _buildCheckbox(
-            'Type of Competition',
-            'UI UX Designer',
-            uiUxDesignerType,
+            'Category',
+            'Web',
+            webCategory,
             (value) {
               setState(() {
-                uiUxDesignerType = value!;
+                webCategory = value!;
+                if (value) _resetOtherCheckboxes('webCategory');
               });
             },
           ),
           _buildCheckbox(
             '',
-            'Website',
-            websiteType,
+            'UI/UX',
+            uiUxCategory,
             (value) {
               setState(() {
-                websiteType = value!;
+                uiUxCategory = value!;
+                if (value) _resetOtherCheckboxes('uiUxCategory');
+              });
+            },
+          ),
+          _buildCheckbox(
+            '',
+            'Mobile',
+            mobileCategory,
+            (value) {
+              setState(() {
+                mobileCategory = value!;
+                if (value) _resetOtherCheckboxes('mobileCategory');
               });
             },
           ),
           const SizedBox(height: 16),
           _buildCheckbox(
-            'Topic of Competition',
-            'UI UX Designer',
-            uiUxDesignerTopic,
+            'Platform',
+            'Zoom',
+            zoomPlatform,
             (value) {
               setState(() {
-                uiUxDesignerTopic = value!;
+                zoomPlatform = value!;
+                if (value) _resetOtherCheckboxes('zoomPlatform');
               });
             },
           ),
           _buildCheckbox(
             '',
-            'Website',
-            websiteTopic,
+            'GMeet',
+            gmeetPlatform,
             (value) {
               setState(() {
-                websiteTopic = value!;
+                gmeetPlatform = value!;
+                if (value) _resetOtherCheckboxes('gmeetPlatform');
               });
             },
           ),
@@ -94,26 +147,29 @@ class _FilterSheetState extends State<FilterSheet> {
             (value) {
               setState(() {
                 jakartaLocation = value!;
+                if (value) _resetOtherCheckboxes('jakartaLocation');
               });
             },
           ),
           _buildCheckbox(
             '',
-            'Jawa Barat',
-            jawaBaratLocation,
+            'Bandung',
+            bandungLocation,
             (value) {
               setState(() {
-                jawaBaratLocation = value!;
+                bandungLocation = value!;
+                if (value) _resetOtherCheckboxes('bandungLocation');
               });
             },
           ),
           _buildCheckbox(
             '',
-            'Jawa Tengah',
-            jawaTengahLocation,
+            'Yogyakarta',
+            yogyakartaLocation,
             (value) {
               setState(() {
-                jawaTengahLocation = value!;
+                yogyakartaLocation = value!;
+                if (value) _resetOtherCheckboxes('yogyakartaLocation');
               });
             },
           ),
@@ -121,7 +177,7 @@ class _FilterSheetState extends State<FilterSheet> {
           ProfileDateField(
             label: 'Select Date',
             placeholder: 'YYYY-MM-DD',
-            controller: _controller.birthDateController,
+            controller: _dateController,
           ),
           const SizedBox(
             height: 16,
@@ -133,13 +189,15 @@ class _FilterSheetState extends State<FilterSheet> {
                   onPressed: () {
                     // Clear filter logic here
                     setState(() {
-                      uiUxDesignerType = false;
-                      websiteType = false;
-                      uiUxDesignerTopic = false;
-                      websiteTopic = false;
+                      webCategory = false;
+                      uiUxCategory = false;
+                      mobileCategory = false;
+                      zoomPlatform = false;
+                      gmeetPlatform = false;
                       jakartaLocation = false;
-                      jawaBaratLocation = false;
-                      jawaTengahLocation = false;
+                      bandungLocation = false;
+                      yogyakartaLocation = false;
+                      _dateController.clear();
                     });
                   },
                   style: ElevatedButton.styleFrom(
@@ -156,6 +214,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ElevatedButton(
                   onPressed: () {
                     // Apply filter logic here
+                    _applyFilter();
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(

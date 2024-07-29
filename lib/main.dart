@@ -45,8 +45,11 @@ class MyApp extends StatelessWidget {
       ],
     );
 
-    return ChangeNotifierProvider(
-      create: (context) => GetCompetitionController(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GetCompetitionController()),
+        // Add other providers here if needed
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerDelegate: _router.routerDelegate,

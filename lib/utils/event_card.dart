@@ -8,10 +8,11 @@ class EventCard extends StatelessWidget {
   final String title;
   final String date;
   final String location;
-  final String imageUrl;
   final String peopleRegistered;
   final String label;
   final String label2;
+  final String imageUrl;
+  //  final Widget imageUrl;
 
   const EventCard({
     super.key,
@@ -19,10 +20,10 @@ class EventCard extends StatelessWidget {
     required this.title,
     required this.date,
     required this.location,
-    required this.imageUrl,
     required this.peopleRegistered,
     required this.label,
     required this.label2,
+    required this.imageUrl,
   });
 
   @override
@@ -32,7 +33,9 @@ class EventCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(imageUrl), // Adjust image asset
+          Image.asset(imageUrl), // Adjust image asset // Adjust image asset
+          // imageUrl, // Adjust image asset
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

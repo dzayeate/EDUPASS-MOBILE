@@ -5,6 +5,7 @@ import 'package:edupass_mobile/screens/home/components/detail_comp_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DetailCompScreen extends StatefulWidget {
   final String id;
@@ -239,7 +240,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     ],
                   ),
                   child: Text(
-                    'Registration fee is IDR 50,000 per team.',
+                    'Registrasi Gratis',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.indigo[900],
@@ -286,7 +287,10 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     controller: _tabController,
                     children: [
                       DescriptionTab(
-                          description: _competitionDetail!['description']),
+                        description: _competitionDetail!['description'],
+                        mentors: _competitionDetail!['mentor'],
+                        sponsors: _competitionDetail!['sponsor'],
+                      ),
                       const PrizesTab(),
                     ],
                   ),
@@ -306,6 +310,9 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                             color: Colors.black),
                         onPressed: () {
                           // Handle share button press
+                          final url =
+                              'http://192.168.1.4:3000/competition/findCompetition?page=1&length=1&search=${widget.id}';
+                          Share.share('Check out this competition: $url');
                         },
                         padding: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
@@ -324,8 +331,9 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const CompetitionMhsRegis()),
+                                builder: (context) => CompetitionMhsRegis(
+                                      id: widget.id,
+                                    )),
                           );
                         },
                         style: ElevatedButton.styleFrom(

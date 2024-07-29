@@ -1,3 +1,4 @@
+import 'package:edupass_mobile/api/get_user/get_user_service.dart';
 import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/notification/notification_screen.dart';
 import 'package:edupass_mobile/utils/event_card.dart';
@@ -7,8 +8,55 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<String> _futureFirstName;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _futureFirstName = _fetchFirstName();
+
+    // Add scroll listener
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      Provider.of<GetCompetitionController>(context, listen: false).loadMore();
+    }
+  }
+
+  Future<String> _fetchFirstName() async {
+    try {
+      final userService = GetUserService();
+      final userData = await userService.getUserByBiodateId();
+      if (userData != null &&
+          userData['biodate']['firstName'] != null &&
+          userData['biodate']['firstName'].isNotEmpty) {
+        return userData['biodate']['firstName'];
+      } else {
+        return 'user';
+      }
+    } catch (e) {
+      debugPrint('Error fetching user data: $e');
+      return 'user';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +76,39 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: Text(
-            'Hi, John!',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          title: FutureBuilder<String>(
+            future: _futureFirstName,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text(
+                  'Loading...',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text(
+                  'Hi, user!',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              } else {
+                final firstName = snapshot.data!;
+                return Text(
+                  'Hi, $firstName!',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }
+            },
           ),
           actions: [
             IconButton(
@@ -107,7 +181,8 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: Consumer<GetCompetitionController>(
                   builder: (context, competitionController, child) {
-                    if (competitionController.isLoading) {
+                    if (competitionController.isLoading &&
+                        competitionController.competitions.isEmpty) {
                       return Center(child: CircularProgressIndicator());
                     }
 
@@ -116,13 +191,45 @@ class HomeScreen extends StatelessWidget {
                           child: Text(competitionController.errorMessage!));
                     }
 
+                    if (competitionController.competitions.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Kompetisi tidak ditemukan',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                Provider.of<GetCompetitionController>(context,
+                                        listen: false)
+                                    .fetchCompetitions();
+                              },
+                              child: Text('Refresh'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
                     return Column(
                       children: [
                         Expanded(
                           child: ListView.builder(
+                            controller: _scrollController,
                             itemCount:
-                                competitionController.competitions.length,
+                                competitionController.competitions.length +
+                                    (competitionController.isLoading ? 1 : 0),
                             itemBuilder: (context, index) {
+                              if (index ==
+                                  competitionController.competitions.length) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
                               final competition =
                                   competitionController.competitions[index];
                               return EventCard(
@@ -132,27 +239,31 @@ class HomeScreen extends StatelessWidget {
                                 location: competition['location'],
                                 peopleRegistered:
                                     '', // Data ini tidak ada di API
-                                label: '', // Data ini tidak ada di API
-                                label2: '', // Data ini tidak ada di API
+                                label: competition[
+                                    'category'], // Data ini tidak ada di API
+                                label2: competition[
+                                    'platform'], // Data ini tidak ada di API
                                 imageUrl:
                                     'assets/images/competition_1.png', // Adjust image asset
+
+                                // imageUrl: competition['banner'] != null &&
+                                //         competition['banner'].isNotEmpty
+                                //     ? Image.network(
+                                //         competition['banner'],
+                                //         width: 100,
+                                //         height: 165,
+                                //         fit: BoxFit.cover,
+                                //       )
+                                //     : Image.asset(
+                                //         'assets/images/competition_1.png',
+                                //         width: 100,
+                                //         height: 165,
+                                //         fit: BoxFit.cover,
+                                //       ), // Adjust image asset
                               );
                             },
                           ),
                         ),
-                        if (competitionController.competitions.length <
-                            competitionController.total)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Provider.of<GetCompetitionController>(context,
-                                        listen: false)
-                                    .loadMore();
-                              },
-                              child: Text('Load More'),
-                            ),
-                          ),
                       ],
                     );
                   },
