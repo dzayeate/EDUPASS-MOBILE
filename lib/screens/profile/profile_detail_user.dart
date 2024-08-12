@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:edupass_mobile/controllers/auth/update_user_controller.dart';
 import 'package:edupass_mobile/controllers/users/profile_user_controller.dart';
-import 'package:edupass_mobile/screens/edupass_app.dart';
+import 'package:edupass_mobile/screens/components/custom_text_field.dart';
 import 'package:edupass_mobile/screens/error_screen.dart';
-import 'package:edupass_mobile/screens/profile/components/dropdown_field.dart';
-import 'package:edupass_mobile/screens/profile/components/profile_date_field.dart';
-import 'package:edupass_mobile/screens/profile/components/profile_text_field.dart';
-import 'package:edupass_mobile/screens/profile/components/upload_image_field.dart';
+import 'package:edupass_mobile/screens/components/dropdown_field.dart';
+import 'package:edupass_mobile/screens/components/custom_date_field.dart';
 import 'package:edupass_mobile/screens/profile/components/user_avatar_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-// ProfileDetailUser
 
+// ProfileDetailUser
 class ProfileDetailUser extends StatefulWidget {
   const ProfileDetailUser({super.key});
 
@@ -23,7 +19,6 @@ class ProfileDetailUser extends StatefulWidget {
 
 class _ProfileDetailUserState extends State<ProfileDetailUser> {
   String? _selectedImagePath;
-  String? _selectedBackgroundPath;
   bool _dataInitialized = false;
 
   final UpdateUserController updateController = UpdateUserController();
@@ -33,15 +28,6 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
       _selectedImagePath = filePath;
       updateController.setImagePath(filePath);
       // updateController.imageController.text = filePath;
-    });
-    debugPrint('File path: $filePath');
-  }
-
-  void _handleBackgroundSelected(String filePath) {
-    setState(() {
-      _selectedBackgroundPath = filePath;
-      updateController.setProofPath(filePath);
-      // updateController.proofController.text = filePath;
     });
     debugPrint('File path: $filePath');
   }
@@ -96,6 +82,15 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
             updateController.uniqueIdController.text =
                 profileController.userData!['biodate']['pupils'] ?? '';
 
+            // Cek apakah image itu null atau tidak sebelum mengakses previewUrl
+            var image = profileController.userData!['biodate']['image'];
+            if (image['previewUrl'] != null) {
+              updateController.imageController.text =
+                  image['previewUrl'].replaceAll("localhost", "192.168.1.4");
+            } else {
+              updateController.imageController.text = '';
+            }
+
             _dataInitialized = true;
           }
 
@@ -103,18 +98,6 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const EduPassApp(initialPageIndex: 4),
-                    ),
-                  );
-                },
-              ),
               title: Text(
                 'Profile',
                 style: GoogleFonts.poppins(
@@ -131,112 +114,117 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
                     left: 16, right: 16, top: 16, bottom: 30),
                 child: Column(
                   children: [
-                    UserAvatarField(onFileSelected: _handleImageSelected),
-                    const SizedBox(height: 20),
-                    if (_selectedImagePath != null) ...[
-                      Text('Selected file: $_selectedImagePath'),
-                      // Jika Anda ingin menampilkan gambar yang diunggah
-                      Image.file(
-                        File(_selectedImagePath!),
-                        height: 200,
-                      ),
-                    ],
+                    UserAvatarField(
+                      onFileSelected: _handleImageSelected,
+                      imagePath: _selectedImagePath ??
+                          profileController.userData!['biodate']['image']
+                                  ['previewUrl']
+                              ?.replaceAll("localhost", "192.168.1.4"),
+                    ),
+                    // const SizedBox(height: 20),
+                    // if (_selectedImagePath != null) ...[
+                    //   Text('Selected file: $_selectedImagePath'),
+                    //   // Jika Anda ingin menampilkan gambar yang diunggah
+                    //   Image.file(
+                    //     File(_selectedImagePath!),
+                    //     height: 200,
+                    //   ),
+                    // ],
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Nama Depan',
-                      placeholder: 'John',
+                    CustomTextField(
+                      labelText: 'Nama Depan',
+                      hintText: 'John',
                       controller: updateController.firstNameController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Nama Belakang',
-                      placeholder: 'Doe',
+                    CustomTextField(
+                      labelText: 'Nama Belakang',
+                      hintText: 'Doe',
                       controller: updateController.lastNameController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Email',
-                      placeholder: 'stevejobs@gmail.com',
+                    CustomTextField(
+                      labelText: 'Email',
+                      hintText: 'stevejobs@gmail.com',
                       enabled: false,
                       controller: TextEditingController(
                         text: profileController.userData!['email'] ?? '',
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ProfileDateField(
+                    CustomDateField(
                       label: 'Select Date',
                       placeholder: 'YYYY-MM-DD',
                       controller: updateController.birthDateController,
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        debugPrint(
-                            'Selected Date: ${updateController.birthDateController.text}');
-                      },
-                      child: const Text('Print Selected Date'),
-                    ),
-                    const SizedBox(height: 16),
                     DropdownField(
                       label: 'Jenis Kelamin',
-                      items: const ['Pria', 'Wanita', ''],
+                      items: const [
+                        'Pria',
+                        'Wanita',
+                        'Female',
+                        'Male',
+                        'Laki_laki',
+                        ''
+                      ],
                       controller: updateController.genderController,
                       onChanged: (value) {
                         debugPrint(
                             'Selected Gender: ${updateController.genderController.text}');
                       },
                     ),
+                    // const SizedBox(height: 16),
+                    // UploadImageField(onFileSelected: _handleBackgroundSelected),
+                    // const SizedBox(height: 20),
+                    // if (_selectedBackgroundPath != null) ...[
+                    //   Text('Selected file: $_selectedBackgroundPath'),
+                    //   // Jika Anda ingin menampilkan gambar yang diunggah
+                    //   Image.file(
+                    //     File(_selectedBackgroundPath!),
+                    //     height: 200,
+                    //   ),
+                    // ],
                     const SizedBox(height: 16),
-                    UploadImageField(onFileSelected: _handleBackgroundSelected),
-                    const SizedBox(height: 20),
-                    if (_selectedBackgroundPath != null) ...[
-                      Text('Selected file: $_selectedBackgroundPath'),
-                      // Jika Anda ingin menampilkan gambar yang diunggah
-                      Image.file(
-                        File(_selectedBackgroundPath!),
-                        height: 200,
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Provinsi',
-                      placeholder: 'California',
+                    CustomTextField(
+                      labelText: 'Provinsi',
+                      hintText: 'California',
                       controller: updateController.provinceController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Regencies',
-                      placeholder: 'San Francisco',
+                    CustomTextField(
+                      labelText: 'Kabupaten/Kota',
+                      hintText: 'San Francisco',
                       controller: updateController.regenciesController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Nomor HP',
-                      placeholder: '08123456789',
+                    CustomTextField(
+                      labelText: 'Nomor HP',
+                      hintText: '08123456789',
                       controller: updateController.phoneController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Alamat',
-                      placeholder: 'Jalan Jendral Sudirman No 1',
+                    CustomTextField(
+                      labelText: 'Alamat',
+                      hintText: 'Jalan Jendral Sudirman No 1',
                       controller: updateController.addressController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Nama Instansi',
-                      placeholder: 'Harvard University',
+                    CustomTextField(
+                      labelText: 'Nama Instansi',
+                      hintText: 'Harvard University',
                       controller: updateController.institutionNameController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'Bidang Studi/Jurusan',
-                      placeholder: 'Teknik Informatika',
+                    CustomTextField(
+                      labelText: 'Bidang Studi/Jurusan',
+                      hintText: 'Teknik Informatika',
                       controller: updateController.studyFieldController,
                     ),
                     const SizedBox(height: 16),
-                    ProfileTextField(
-                      label: 'NIM/NISN',
-                      placeholder: '123123123',
+                    CustomTextField(
+                      labelText: 'NIM/NISN',
+                      hintText: '123123123',
                       controller: updateController.uniqueIdController,
                     ),
                     const SizedBox(height: 32),

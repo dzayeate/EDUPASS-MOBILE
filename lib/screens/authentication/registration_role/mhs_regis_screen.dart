@@ -1,7 +1,4 @@
-import 'package:edupass_mobile/screens/components/custom_dropdown.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
-import 'package:edupass_mobile/screens/components/custom_upload_field.dart';
-import 'package:edupass_mobile/screens/components/upload_file_field.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -110,17 +107,22 @@ class _MahasiswaRegisterState extends State<MahasiswaRegister> {
               readOnly: false,
             ),
             const SizedBox(height: 16),
-            const CustomUploadFile(
-              hintText: 'Upload Foto',
-            ),
+            //  UploadFileField(
+            //   onFileSelected: _handleFileSelected,
+            //   allowedExtensions: const [
+            //     'jpg, jpeg, png,',
+            //   ], // Allow images and PDFs
+            // ),
             const SizedBox(height: 16),
-            CustomDropDown(
-              items: const ['SD', 'SMP', 'SMA', 'Mahasiswa'],
-              hint: 'Tingkat Instansi',
-              onChanged: (value) {
-                // Handle value change
-              },
-            ),
+            //  DropdownField(
+            //             label: 'Jenis Kelamin',
+            //             items: const ['SD', 'SMP', 'SMA', 'Mahasiswa', ''],
+            //             controller: updateController.genderController,
+            //             onChanged: (value) {
+            //               debugPrint(
+            //                   'Selected Gender: ${updateController.genderController.text}');
+            //             },
+            //           ),
             const SizedBox(height: 16),
             const CustomTextField(
               labelText: 'Provinsi',

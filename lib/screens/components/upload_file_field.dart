@@ -1,46 +1,78 @@
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
-// UploadFileField
+import 'package:image/image.dart' as img; // Import the image package
 
 class UploadFileField extends StatefulWidget {
-  const UploadFileField({super.key, required this.onFileSelected});
+  const UploadFileField({
+    super.key,
+    required this.onFileSelected,
+    this.initialFileName,
+    required this.allowedExtensions, // Add allowedExtensions parameter
+  });
 
   final void Function(String filePath) onFileSelected;
+  final String? initialFileName; // Optional initial file name
+  final List<String> allowedExtensions; // Allowed file extensions
 
   @override
   State<UploadFileField> createState() => _UploadFileFieldState();
 }
 
 class _UploadFileFieldState extends State<UploadFileField> {
-  String? _fileName; // Variabel untuk menyimpan nama file
-  File? _selectedFile; // Variabel untuk menyimpan data file path
+  String? _fileName; // Variable to store the file name
+  File? _selectedFile; // Variable to store the file data path
+
+  @override
+  void initState() {
+    super.initState();
+    _fileName = widget.initialFileName; // Set the initial file name
+  }
 
   void _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: widget.allowedExtensions, // Use dynamic extensions
     );
+
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.first;
-      if (file.size <= 5 * 1024 * 1024) {
+
+      if (file.size > 5 * 1024 * 1024) {
         // Max 5MB
-        setState(() {
-          _fileName = file.name; // Set nama file untuk ditampilkan di UI
-          _selectedFile =
-              File(file.path!); // Simpan file path dalam variabel _selectedFile
-        });
-        widget.onFileSelected(
-            file.path!); // Pass the actual file path to the callback
-      } else {
-        // Show error message if file size exceeds 5MB
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('File size exceeds 5MB')),
         );
+        return;
       }
+
+      // Check image dimensions
+      final filePath = file.path!;
+      final imageBytes = await File(filePath).readAsBytes();
+      final image = img.decodeImage(imageBytes);
+
+      if (image == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Unable to process image')),
+        );
+        return;
+      }
+
+      if (image.width != 300 || image.height != 300) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image must be 300x300 pixels')),
+        );
+        return;
+      }
+
+      setState(() {
+        _fileName = file.name; // Set file name for display in the UI
+        _selectedFile =
+            File(filePath); // Save file path in _selectedFile variable
+      });
+      widget.onFileSelected(
+          filePath); // Pass the actual file path to the callback
     }
   }
 
@@ -50,7 +82,7 @@ class _UploadFileFieldState extends State<UploadFileField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Upload Proposal',
+          'Dokumen Pendukung',
           style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -75,7 +107,7 @@ class _UploadFileFieldState extends State<UploadFileField> {
                 const SizedBox(height: 8),
                 Text(
                   _fileName ??
-                      'Click to upload', // Tampilkan nama file atau prompt untuk upload
+                      'Click to upload', // Display file name or upload prompt
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     color: Colors.indigo,
@@ -83,7 +115,7 @@ class _UploadFileFieldState extends State<UploadFileField> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'PDF (max 5MB)',
+                  'Format File : ${widget.allowedExtensions.join(', ').toUpperCase()} (max 5MB)',
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     color: Colors.indigo,

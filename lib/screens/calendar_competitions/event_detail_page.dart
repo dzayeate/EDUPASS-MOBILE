@@ -1,7 +1,6 @@
 import 'package:edupass_mobile/models/event/event_model.dart';
 import 'package:edupass_mobile/screens/home/detail_comp.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class EventDetailPage extends StatelessWidget {
   final EventModel event;

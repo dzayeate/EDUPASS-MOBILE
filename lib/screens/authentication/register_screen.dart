@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             Text(
-                              "Pass",
+                              "Pas",
                               style: GoogleFonts.poppins(
                                 color: Colors.red[400],
                                 fontSize: 42,

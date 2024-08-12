@@ -1,9 +1,12 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:edupass_mobile/api/competition/get/get_comp_service.dart';
 import 'package:edupass_mobile/controllers/competition/post/register_comp_controller.dart';
+import 'package:edupass_mobile/screens/components/custom_number_field.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
 import 'package:edupass_mobile/screens/components/upload_file_field.dart';
-import 'package:edupass_mobile/screens/profile/components/upload_image_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ionicons/ionicons.dart';
 
 class CompetitionMhsRegis extends StatefulWidget {
   final String id;
@@ -23,6 +26,37 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
   List<Widget> anggotaFields = [];
   List<TextEditingController> anggotaControllers = [];
 
+  final GetCompetitionService _competitionService = GetCompetitionService();
+
+  bool _isLoading = true;
+  String? _errorMessage;
+  Map<String, dynamic>? _competitionDetail;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCompetitionDetail();
+  }
+
+  Future<void> _fetchCompetitionDetail() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final data = await _competitionService.getCompetitionDetail(widget.id);
+      setState(() {
+        _competitionDetail = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
   void _handleFileSelected(String filePath) {
     setState(() {
       _selectedFilePath = filePath;
@@ -32,26 +66,132 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
     debugPrint('File path: $filePath');
   }
 
+  void _removeAnggotaField(int index) {
+    setState(() {
+      if (index >= 0 && index < anggotaControllers.length) {
+        anggotaControllers.removeAt(index);
+        anggotaFields.removeAt(index);
+      }
+    });
+  }
+
   void _addAnggotaField() {
-    TextEditingController newController = TextEditingController();
-    anggotaControllers.add(newController);
-    anggotaFields.add(
-      Column(
-        children: [
-          const SizedBox(height: 16),
-          CustomTextField(
-            labelText: 'Nama Anggota',
-            hintText: 'Nama Anggota',
-            readOnly: false,
-            controller: newController,
+    if (controller.teamSize.text.isNotEmpty) {
+      int maxAnggota = int.tryParse(controller.teamSize.text) ?? 0;
+      if (anggotaFields.length < maxAnggota) {
+        TextEditingController newController = TextEditingController();
+        anggotaControllers.add(newController);
+        anggotaFields.add(
+          Column(
+            children: [
+              const SizedBox(height: 16),
+              CustomTextField(
+                labelText: 'Masukkan Email Anggota',
+                hintText: 'johndoe@gmail.com',
+                controller: newController,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  _removeAnggotaField(anggotaFields.length - 1);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red, // Warna latar belakang tombol
+                ),
+                child: const Text(
+                  'Hapus Anggota',
+                  style: TextStyle(color: Colors.white), // Warna teks
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+      } else {
+        final snackBar = SnackBar(
+          /// need to set following properties for best effect of awesome_snackbar_content
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: AwesomeSnackbarContent(
+              titleFontSize: 17,
+              messageFontSize: 15,
+              title: 'Perhatian!',
+              message: 'Jumlah anggota maksimal sudah tercapai.',
+              contentType: ContentType.warning,
+            ),
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    } else {
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: AwesomeSnackbarContent(
+            titleFontSize: 17,
+            messageFontSize: 15,
+            title: 'Perhatian!',
+            message: 'Masukkan jumlah anggota terlebih dahulu.',
+            contentType: ContentType.warning,
+          ),
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Loading...', style: GoogleFonts.poppins(fontSize: 20)),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Error', style: GoogleFonts.poppins(fontSize: 20)),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_errorMessage!),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _fetchCompetitionDetail,
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -72,43 +212,62 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 24),
-            const Text(
-              'Title Competition',
-              style: TextStyle(
+            Text(
+              _competitionDetail!['name'],
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Competition description. Forem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus.',
-              style: TextStyle(
+            Text(
+              _competitionDetail!['description'],
+              style: const TextStyle(
                 fontSize: 16,
               ),
               textAlign: TextAlign.justify,
             ),
             const SizedBox(height: 36),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  const Icon(Ionicons.calendar_outline, color: Colors.indigo),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Schedule : ${_competitionDetail!['startDate']} s/d ${_competitionDetail!['endDate']}',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  const Icon(Ionicons.time_outline, color: Colors.indigo),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Schedule : ${_competitionDetail!['startTime']} s/d ${_competitionDetail!['endTime']}',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Time, date - Location',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                'Selesaikan form registrasi dibawah ini',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 8),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Complete the registration form below',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             CustomTextField(
               labelText: 'Asal Lokasi',
               hintText: 'Bandung',
@@ -116,28 +275,31 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
               controller: controller.domicile,
             ),
             const SizedBox(height: 16),
-            CustomTextField(
-              labelText: 'Nomor Handphone',
-              hintText: 'Masukkan Nomor',
+            CustomNumberField(
+              labelText: 'Masukkan Nomor Telepon',
+              hintText: '082123123',
               readOnly: false,
               controller: controller.phoneNumber,
             ),
             const SizedBox(height: 30),
-            UploadFileField(onFileSelected: _handleFileSelected),
+            UploadFileField(
+              onFileSelected: _handleFileSelected,
+              allowedExtensions: const [
+                'pdf',
+              ], // Allow images and PDFs
+            ),
             const SizedBox(height: 24),
             if (_selectedFilePath != null) ...[
               Text('Selected file: $_selectedFilePath'),
             ],
             const SizedBox(height: 16),
-            const CustomTextField(
-              labelText: 'Nama Tim',
-              hintText: 'Masukkan Nama Tim',
-              readOnly: false,
-            ),
-            const SizedBox(height: 16),
             Row(
               children: [
-                const Text('Registrasi sebagai tim'),
+                Text(
+                  'Registrasi sebagai tim',
+                  style: GoogleFonts.poppins(
+                      fontSize: 16, fontWeight: FontWeight.w400),
+                ),
                 Checkbox(
                   value: isTeam,
                   onChanged: (bool? value) {
@@ -150,8 +312,15 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
             ),
             if (isTeam) ...[
               CustomTextField(
+                labelText: 'Nama Tim',
+                hintText: 'Masukkan Nama Tim',
+                readOnly: false,
+                controller: controller.nameTeam,
+              ),
+              const SizedBox(height: 16),
+              CustomNumberField(
                 labelText: 'Jumlah Anggota',
-                hintText: 'Jumlah Anggota',
+                hintText: '3 Anggota',
                 readOnly: false,
                 controller: controller.teamSize,
               ),
@@ -173,16 +342,11 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
                   ),
                 ),
                 child: const Text(
-                  'Tambah anggota',
+                  'Tambahkan Anggota',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
             ],
-            const SizedBox(height: 24),
-            // CustomUploadFile(
-            //   hintText: 'Proposal',
-            // ),
-
             const SizedBox(height: 24),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,19 +397,93 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                if (isInfoChecked && isAgreeChecked) {
+                int maxAnggota = int.tryParse(controller.teamSize.text) ?? 0;
+                if (isTeam && controller.nameTeam.text.trim().isEmpty) {
+                  final snackBar = SnackBar(
+                    elevation: 0,
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.transparent,
+                    content: Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 70),
+                      child: AwesomeSnackbarContent(
+                        titleFontSize: 17,
+                        messageFontSize: 15,
+                        title: 'Perhatian!',
+                        message:
+                            'Nama Tim wajib diisi untuk registrasi sebagai tim.',
+                        contentType: ContentType.warning,
+                      ),
+                    ),
+                  );
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(snackBar);
+                  return;
+                }
+
+                if (isInfoChecked &&
+                    isAgreeChecked &&
+                    (anggotaFields.length == maxAnggota || !isTeam)) {
                   Navigator.pop(
                     context,
                   );
                   controller.register(context, widget.id, isTeam,
                       anggotaFields.length, anggotaControllers);
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                          'You must accept the terms and conditions to proceed.'),
+                  // String message =
+                  //     'You must accept the terms and conditions to proceed.';
+                  final snackBar = SnackBar(
+                    /// need to set following properties for best effect of awesome_snackbar_content
+                    elevation: 0,
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.transparent,
+                    content: Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 70),
+                      child: AwesomeSnackbarContent(
+                        titleFontSize: 17,
+                        messageFontSize: 15,
+                        title: 'Perhatian!',
+                        message:
+                            'Anda harus menyetujui terms and conditions untuk melanjutkan.',
+                        contentType: ContentType.warning,
+                      ),
                     ),
                   );
+
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(snackBar);
+
+                  if (isTeam && anggotaFields.length != maxAnggota) {
+                    // message =
+                    //     'Jumlah anggota harus sesuai dengan yang diisi di kolom jumlah anggota.';
+                    final snackBar = SnackBar(
+                      /// need to set following properties for best effect of awesome_snackbar_content
+                      elevation: 0,
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.transparent,
+                      content: Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 70),
+                        child: AwesomeSnackbarContent(
+                          titleFontSize: 17,
+                          messageFontSize: 15,
+                          title: 'Perhatian!',
+                          message:
+                              'Jumlah anggota harus sesuai dengan yang diisi di kolom jumlah anggota.',
+                          contentType: ContentType.warning,
+                        ),
+                      ),
+                    );
+
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(snackBar);
+                  }
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(message),
+                  //   ),
+                  // );
                 }
               },
               style: ElevatedButton.styleFrom(

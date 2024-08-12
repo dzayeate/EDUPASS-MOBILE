@@ -1,7 +1,5 @@
-import 'package:edupass_mobile/controllers/auth/login_controller.dart';
-import 'package:edupass_mobile/controllers/auth/update_user_controller.dart';
 import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
-import 'package:edupass_mobile/screens/profile/components/profile_date_field.dart';
+import 'package:edupass_mobile/screens/components/custom_date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -174,7 +172,7 @@ class _FilterSheetState extends State<FilterSheet> {
             },
           ),
           const SizedBox(height: 16),
-          ProfileDateField(
+          CustomDateField(
             label: 'Select Date',
             placeholder: 'YYYY-MM-DD',
             controller: _dateController,

@@ -1,41 +1,61 @@
 import 'package:edupass_mobile/screens/home/detail_comp.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EventCard extends StatelessWidget {
   final String id;
   final String title;
-  final String date;
+  final String startDate;
+  final String endDate;
   final String location;
   final String peopleRegistered;
   final String label;
-  final String label2;
-  final String imageUrl;
-  //  final Widget imageUrl;
+  final String labelTwo;
+  final String? imageUrl; // imageUrl now can be null
 
   const EventCard({
     super.key,
     required this.id,
     required this.title,
-    required this.date,
+    required this.startDate,
+    required this.endDate,
     required this.location,
     required this.peopleRegistered,
     required this.label,
-    required this.label2,
-    required this.imageUrl,
+    required this.labelTwo,
+    this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the image is from network or local
+    final bool isNetworkImage =
+        imageUrl != null && imageUrl!.startsWith("http");
+
+    // Choose the correct image widget based on the source
+    final Widget imageWidget = ClipRRect(
+      borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
+      child: isNetworkImage
+          ? Image.network(
+              imageUrl!, // Image from network
+              width: 100, // Adjust this value based on your design
+              height: 150,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
+              'assets/images/competition_1.png', // Default image
+              width: 100, // Adjust this value based on your design
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+    );
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(imageUrl), // Adjust image asset // Adjust image asset
-          // imageUrl, // Adjust image asset
-
+          imageWidget,
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -82,7 +102,7 @@ class EventCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          label2,
+                          labelTwo,
                           style: GoogleFonts.poppins(
                             fontSize: 12,
                             color: Colors.white,
@@ -96,7 +116,11 @@ class EventCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.event, size: 16),
                       const SizedBox(width: 8),
-                      Text(date),
+                      Text(startDate),
+                      const SizedBox(width: 8),
+                      const Text("s/d"),
+                      const SizedBox(width: 8),
+                      Text(endDate),
                     ],
                   ),
                   const SizedBox(height: 8),

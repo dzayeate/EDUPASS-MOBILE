@@ -1,7 +1,4 @@
-import 'package:edupass_mobile/api/get_user/get_user_service.dart';
 import 'package:edupass_mobile/screens/home/components/user_detail_fetcher.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -104,7 +101,7 @@ class _DescriptionTabState extends State<DescriptionTab> {
                 ),
                 const SizedBox(height: 4),
                 buildMentorsList(),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 Text(
                   'ORGANIZER',
                   style: GoogleFonts.poppins(

@@ -2,7 +2,6 @@ import 'package:edupass_mobile/api/auth/auth_service.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/utils/dialog_helper.dart';
 import 'package:edupass_mobile/models/auth/registration_model.dart';
-import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:flutter/material.dart';
 
 class RegisterController {

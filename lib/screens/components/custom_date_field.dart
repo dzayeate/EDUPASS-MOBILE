@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileDateField extends StatefulWidget {
+class CustomDateField extends StatefulWidget {
   final String label;
   final String placeholder;
   final TextEditingController controller;
   final bool enabled;
 
-  const ProfileDateField({
+  const CustomDateField({
     super.key,
     required this.label,
     required this.placeholder,
@@ -17,10 +17,10 @@ class ProfileDateField extends StatefulWidget {
   });
 
   @override
-  _ProfileDateFieldState createState() => _ProfileDateFieldState();
+  _CustomDateFieldState createState() => _CustomDateFieldState();
 }
 
-class _ProfileDateFieldState extends State<ProfileDateField> {
+class _CustomDateFieldState extends State<CustomDateField> {
   @override
   Widget build(BuildContext context) {
     return Column(

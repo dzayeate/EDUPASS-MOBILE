@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BiodateIdManager {
@@ -10,7 +9,7 @@ class BiodateIdManager {
   Future<String?> getBiodateId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? biodateId = prefs.getString('biodateId');
-    debugPrint('Retrieved BiodateId: $biodateId');
+    // debugPrint('Retrieved BiodateId: $biodateId');
     return biodateId;
   }
 
@@ -22,6 +21,6 @@ class BiodateIdManager {
   // Fungsi untuk memeriksa biodateId
   Future<void> checkBiodateId() async {
     String? biodateId = await getBiodateId();
-    debugPrint('BiodateId yang tersimpan: $biodateId');
+    // debugPrint('BiodateId yang tersimpan: $biodateId');
   }
 }

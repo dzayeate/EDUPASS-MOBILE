@@ -1,10 +1,29 @@
-import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/utils/event_card.dart';
+import 'package:edupass_mobile/screens/profile/activity/components/activity_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ActivityUser extends StatelessWidget {
+class ActivityUser extends StatefulWidget {
   const ActivityUser({super.key});
+
+  @override
+  State<ActivityUser> createState() => _ActivityUserState();
+}
+
+class _ActivityUserState extends State<ActivityUser>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,20 +31,6 @@ class ActivityUser extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EduPassApp(initialPageIndex: 4),
-              ),
-            );
-          },
-        ),
         title: Text(
           'Activity',
           style: GoogleFonts.poppins(
@@ -37,52 +42,40 @@ class ActivityUser extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
           children: [
-            // Event Cards
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                indicatorColor: Colors.white,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.black,
+                tabs: const [
+                  Tab(text: 'Aktivitas Dimulai'),
+                  Tab(text: 'Aktivitas Selesai'),
+                ],
+                indicator: BoxDecoration(
+                  color: Colors.indigo,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                indicatorSize: TabBarIndicatorSize.tab,
+              ),
+            ),
+            const SizedBox(height: 12),
             Expanded(
-              child: ListView(
+              child: TabBarView(
+                controller: _tabController,
                 children: const [
-                  EventCard(
-                    id: "1",
-
-                    title: 'NSPACE 2024 : UI/UX COMPETITION',
-                    date: '11 Juli 2024',
-                    location: 'Kampus FT',
-                    peopleRegistered: '50 Orang Terdaftar',
-                    label: 'Lomba',
-                    label2: 'UI/UX Design',
-                    imageUrl:
-                        'assets/images/competition_1.png', // Adjust image asset
-                  ),
-                  EventCard(
-                    id: "1",
-
-                    title: 'NSPACE 2024 : Web COMPETITION',
-                    date: '11 Juli 2024',
-                    location: 'Silicon Valley',
-                    peopleRegistered: '50 Orang Terdaftar',
-                    label: 'Lomba',
-                    label2: 'UI/UX Design',
-                    imageUrl:
-                        'assets/images/competition_2.png', // Adjust image asset
-                  ),
-                  EventCard(
-                    id: "1",
-
-                    title: 'MObil lejen',
-                    date: '11 Juli 2024',
-                    location: 'Di rumah',
-                    peopleRegistered: '50 Orang Terdaftar',
-                    label: 'Lomba',
-                    label2: 'E-sport',
-                    imageUrl:
-                        'assets/images/competition_2.png', // Adjust image asset
-                  ),
+                  UnfinishTab(),
+                  FinishTab(),
                 ],
               ),
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),

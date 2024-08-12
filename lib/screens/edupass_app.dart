@@ -10,6 +10,8 @@ class EduPassApp extends StatefulWidget {
   final int initialPageIndex;
 
   const EduPassApp({super.key, this.initialPageIndex = 0});
+  static final GlobalKey<_EduPassAppState> globalKey =
+      GlobalKey<_EduPassAppState>();
 
   @override
   State<EduPassApp> createState() => _EduPassAppState();
@@ -32,6 +34,12 @@ class _EduPassAppState extends State<EduPassApp> {
     const ProfileUser(),
   ];
 
+  void updatePageIndex(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,9 +49,7 @@ class _EduPassAppState extends State<EduPassApp> {
           : BottomNavBar(
               currentIndex: _pageIndex,
               onTap: (index) {
-                setState(() {
-                  _pageIndex = index;
-                });
+                updatePageIndex(index);
               },
             ),
       body: _pages[_pageIndex],

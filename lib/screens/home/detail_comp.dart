@@ -1,6 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:edupass_mobile/api/competition/get/get_comp_service.dart';
 import 'package:edupass_mobile/screens/competition_task/comp_registration/comp_regis_mhs.dart';
-import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:edupass_mobile/screens/home/components/detail_comp_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,7 +67,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
           foregroundColor: Colors.black,
           elevation: 0,
         ),
-        body: Center(
+        body: const Center(
           child: CircularProgressIndicator(),
         ),
       );
@@ -86,16 +86,26 @@ class _DetailCompScreenState extends State<DetailCompScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(_errorMessage!),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _fetchCompetitionDetail,
-                child: Text('Retry'),
+                child: const Text('Retry'),
               ),
             ],
           ),
         ),
       );
     }
+
+    // Pengecekan tanggal
+    DateTime today = DateTime.now();
+    DateTime startDate =
+        DateFormat('yyyy-MM-dd').parse(_competitionDetail!['startDate']);
+    DateTime endDate =
+        DateFormat('yyyy-MM-dd').parse(_competitionDetail!['endDate']);
+
+    bool isCompetitionOpen =
+        today.isAfter(startDate) && today.isBefore(endDate);
 
     return DefaultTabController(
       length: 2,
@@ -110,12 +120,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
             icon: const Icon(Ionicons.arrow_back, color: Colors.black),
             onPressed: () {
               // Handle back button press
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EduPassApp(initialPageIndex: 0),
-                ),
-              );
+              Navigator.pop(context);
             },
           ),
         ),
@@ -146,11 +151,11 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.blue[300],
+                        color: Colors.red,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        'Competition',
+                        _competitionDetail!['category'],
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.white,
@@ -164,11 +169,11 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.pink[200],
+                        color: Colors.deepPurpleAccent,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        'Education',
+                        _competitionDetail!['platform'],
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.white,
@@ -195,7 +200,32 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     const Icon(Ionicons.calendar_outline, color: Colors.indigo),
                     const SizedBox(width: 8),
                     Text(
-                      _competitionDetail!['date'],
+                      _competitionDetail!['startDate'],
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text("s/d"),
+                    const SizedBox(width: 8),
+                    Text(
+                      _competitionDetail!['endDate'],
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Ionicons.time_outline, color: Colors.indigo),
+                    const SizedBox(width: 8),
+                    Text(
+                      _competitionDetail!['startTime'],
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text("s/d"),
+                    const SizedBox(width: 8),
+                    Text(
+                      _competitionDetail!['endTime'],
                       style: GoogleFonts.poppins(fontSize: 16),
                     ),
                   ],
@@ -217,7 +247,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     const Icon(Icons.people, color: Colors.indigo),
                     const SizedBox(width: 8),
                     Text(
-                      '50 Orang Terdaftar',
+                      '${_competitionDetail!['registrationCount'].toString()} Orang Terdaftar',
                       style: GoogleFonts.poppins(fontSize: 16),
                     ),
                   ],
@@ -240,7 +270,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     ],
                   ),
                   child: Text(
-                    'Registrasi Gratis',
+                    'Biaya Pendaftaran Gratis',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.indigo[900],
@@ -261,8 +291,8 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                     unselectedLabelColor:
                         Colors.black, // Warna teks yang tidak dipilih
                     tabs: const [
-                      Tab(text: 'Description'),
-                      Tab(text: 'Prizes'),
+                      Tab(text: 'Deskripsi'),
+                      Tab(text: 'Hadiah'),
                     ],
                     indicator: BoxDecoration(
                       color: Colors
@@ -282,7 +312,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                 ),
                 SizedBox(
                   height:
-                      500, // Specify a height for TabBarView to make it scrollable
+                      300, // Specify a height for TabBarView to make it scrollable
                   child: TabBarView(
                     controller: _tabController,
                     children: [
@@ -326,16 +356,17 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         width: 16), // Add some spacing between the buttons
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Handle join now button press
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CompetitionMhsRegis(
-                                      id: widget.id,
-                                    )),
-                          );
-                        },
+                        onPressed: isCompetitionOpen
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CompetitionMhsRegis(
+                                            id: widget.id,
+                                          )),
+                                );
+                              }
+                            : null, // Button tidak aktif jika kompetisi ditutup
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                               vertical: 12), // Adjust padding here
@@ -345,9 +376,13 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                           backgroundColor: Colors.indigo, // Background color
                         ),
                         child: Text(
-                          'Join Now',
+                          isCompetitionOpen
+                              ? 'Daftar Sekarang'
+                              : 'Kompetisi Ditutup',
                           style: GoogleFonts.poppins(
-                              fontSize: 16, color: Colors.white),
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

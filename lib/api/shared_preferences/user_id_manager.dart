@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserIdManager {
@@ -10,7 +9,7 @@ class UserIdManager {
   Future<String?> getId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString('userId');
-    debugPrint('Retrieved userId: $userId');
+    // debugPrint('Retrieved userId: $userId');
     return userId;
   }
 
@@ -22,6 +21,6 @@ class UserIdManager {
   // Fungsi untuk memeriksa userId
   Future<void> checkUserId() async {
     String? userId = await getId();
-    debugPrint('userId yang tersimpan: $userId');
+    // debugPrint('userId yang tersimpan: $userId');
   }
 }

@@ -1,9 +1,5 @@
-import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/screens/profile/profile_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,21 +8,12 @@ import 'dart:io';
 class CertificationScreen extends StatelessWidget {
   final String imagePath = 'assets/images/certificate.png';
 
+  const CertificationScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EduPassApp(initialPageIndex: 4),
-              ),
-            );
-          },
-        ),
         title: Text(
           "Your Licenses & Certifications",
           style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold),
@@ -40,28 +27,30 @@ class CertificationScreen extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 hintText: 'Placeholder',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
                     // handle filter action
                   },
-                  icon: Icon(Icons.tune, color: Colors.black),
-                  label: Text('Filters', style: TextStyle(color: Colors.black)),
+                  icon: const Icon(Icons.tune, color: Colors.black),
+                  label: const Text('Filters',
+                      style: TextStyle(color: Colors.black)),
                 ),
-                SizedBox(width: 10), // Menambahkan jarak antara ikon dan teks
+                const SizedBox(
+                    width: 10), // Menambahkan jarak antara ikon dan teks
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Image.asset(imagePath),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -80,8 +69,8 @@ class CertificationScreen extends StatelessWidget {
                       SnackBar(content: Text('Image saved to ${file.path}')),
                     );
                   },
-                  icon: Icon(Icons.save, color: Colors.white),
-                  label: Text('Save as Images',
+                  icon: const Icon(Icons.save, color: Colors.white),
+                  label: const Text('Save as Images',
                       style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors
@@ -102,11 +91,11 @@ class CertificationScreen extends StatelessWidget {
                     Share.shareFiles([file.path],
                         text: 'Check out my certificate!');
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.share,
                     color: Colors.white,
                   ),
-                  label: Text('Send to Email',
+                  label: const Text('Send to Email',
                       style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors

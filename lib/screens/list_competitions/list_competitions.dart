@@ -1,10 +1,39 @@
-import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/utils/event_card.dart';
+import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
+import 'package:edupass_mobile/screens/home/components/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class ListCompetitions extends StatelessWidget {
+class ListCompetitions extends StatefulWidget {
   const ListCompetitions({super.key});
+
+  @override
+  State<ListCompetitions> createState() => _ListCompetitionsState();
+}
+
+class _ListCompetitionsState extends State<ListCompetitions> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Add scroll listener
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      Provider.of<GetCompetitionController>(context, listen: false).loadMore();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,20 +41,6 @@ class ListCompetitions extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EduPassApp(initialPageIndex: 1),
-              ),
-            );
-          },
-        ),
         title: Text(
           'List Competitions',
           style: GoogleFonts.poppins(
@@ -42,43 +57,94 @@ class ListCompetitions extends StatelessWidget {
           children: [
             // Event Cards
             Expanded(
-              child: ListView(
-                children: const [
-                  EventCard(
-                    id: "1",
-                    title: 'NSPACE 2024 : UI/UX COMPETITION',
-                    date: '11 Juli 2024',
-                    location: 'Kampus FT',
-                    peopleRegistered: '50 Orang Terdaftar',
-                    label: 'Lomba',
-                    label2: 'UI/UX Design',
-                    imageUrl:
-                        'assets/images/competition_1.png', // Adjust image asset
-                  ),
-                  EventCard(
-                    id: "1",
-                    title: 'NSPACE 2024 : Web COMPETITION',
-                    date: '11 Juli 2024',
-                    location: 'Silicon Valley',
-                    peopleRegistered: '50 Orang Terdaftar',
-                    label: 'Lomba',
-                    label2: 'UI/UX Design',
-                    imageUrl:
-                        'assets/images/competition_2.png', // Adjust image asset
-                  ),
-                  EventCard(
-                    id: "1",
+              child: Consumer<GetCompetitionController>(
+                builder: (context, competitionController, child) {
+                  if (competitionController.isLoading &&
+                      competitionController.competitions.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                    title: 'MObil lejen',
-                    date: '11 Juli 2024',
-                    location: 'Di rumah',
-                    peopleRegistered: '50 Orang Terdaftar',
-                    label: 'Lomba',
-                    label2: 'E-sport',
-                    imageUrl:
-                        'assets/images/competition_2.png', // Adjust image asset
-                  ),
-                ],
+                  if (competitionController.errorMessage != null) {
+                    return Center(
+                        child: Text(competitionController.errorMessage!));
+                  }
+
+                  if (competitionController.competitions.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Kompetisi tidak ditemukan',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              Provider.of<GetCompetitionController>(context,
+                                      listen: false)
+                                  .fetchCompetitions();
+                            },
+                            child: const Text('Refresh'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: competitionController.competitions.length +
+                              (competitionController.isLoading ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index ==
+                                competitionController.competitions.length) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final competition =
+                                competitionController.competitions[index];
+                            return EventCard(
+                              id: competition['id'],
+                              title: competition['name'],
+                              startDate: competition['startDate'],
+                              endDate: competition['endDate'],
+                              location: competition['location'],
+                              peopleRegistered: competition['registrationCount']
+                                  .toString(), // Data ini tidak ada di API
+                              label: competition[
+                                  'category'], // Data ini tidak ada di API
+                              labelTwo: competition[
+                                  'platform'], // Data ini tidak ada di API
+                              imageUrl:
+                                  'assets/images/competition_1.png', // Adjust image asset
+
+                              // imageUrl: competition['banner'] != null &&
+                              //         competition['banner'].isNotEmpty
+                              //     ? Image.network(
+                              //         competition['banner'],
+                              //         width: 100,
+                              //         height: 165,
+                              //         fit: BoxFit.cover,
+                              //       )
+                              //     : Image.asset(
+                              //         'assets/images/competition_1.png',
+                              //         width: 100,
+                              //         height: 165,
+                              //         fit: BoxFit.cover,
+                              //       ), // Adjust image asset
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],

@@ -12,17 +12,6 @@ class SettingScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(CupertinoIcons.back, color: Colors.black),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EduPassApp(initialPageIndex: 4),
-              ),
-            );
-          },
-        ),
         title: const Text('Settings', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),

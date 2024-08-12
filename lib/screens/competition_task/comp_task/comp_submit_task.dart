@@ -1,30 +1,21 @@
+import 'package:edupass_mobile/controllers/competition/post/submit_comp_controller.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
-import 'package:edupass_mobile/screens/components/upload_file_field.dart';
-import 'package:edupass_mobile/screens/profile/components/upload_image_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CompetitionTask extends StatefulWidget {
-  const CompetitionTask({super.key});
+class SubmitCompetitionTask extends StatefulWidget {
+  const SubmitCompetitionTask({super.key});
 
   @override
-  State<CompetitionTask> createState() => _CompetitionTaskState();
+  State<SubmitCompetitionTask> createState() => _SubmitCompetitionTaskState();
 }
 
-class _CompetitionTaskState extends State<CompetitionTask> {
-  String? _selectedFilePath;
-
-  void _handleFileSelected(String filePath) {
-    setState(() {
-      _selectedFilePath = filePath;
-      // add controller
-    });
-    debugPrint('File path: $filePath');
-  }
+class _SubmitCompetitionTaskState extends State<SubmitCompetitionTask> {
+  final SubmitCommpController submitCompetitionController =
+      SubmitCommpController();
 
   bool isInfoChecked = false;
   bool isAgreeChecked = false;
-  List<Widget> anggotaFields = [];
 
   @override
   Widget build(BuildContext context) {
@@ -85,24 +76,17 @@ class _CompetitionTaskState extends State<CompetitionTask> {
               ),
             ),
             const SizedBox(height: 30),
-            const CustomTextField(
-              labelText: 'Nama Tim',
-              hintText: 'Nama Tim',
-              readOnly: false,
-            ),
-            const SizedBox(height: 24),
-            UploadFileField(onFileSelected: _handleFileSelected),
-            const SizedBox(height: 16),
-            const CustomTextField(
+            CustomTextField(
               labelText: 'Link Figma / Github ',
               hintText: 'http://figma.com',
               readOnly: false,
+              controller: submitCompetitionController.urlController,
             ),
             const SizedBox(height: 24),
-            UploadFileField(onFileSelected: _handleFileSelected),
-            const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                submitCompetitionController.submitCompetition(context);
+              },
               style: ElevatedButton.styleFrom(
                 padding:
                     const EdgeInsets.symmetric(vertical: 14, horizontal: 40),

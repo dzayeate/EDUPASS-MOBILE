@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:edupass_mobile/api/auth/auth_service.dart';
 import 'package:edupass_mobile/models/auth/update_user_model.dart';
 import 'package:edupass_mobile/utils/dialog_helper.dart';
@@ -126,16 +127,47 @@ class UpdateUserController {
 
       if (bioUpdated) {
         reset();
-        Navigator.push(
+        // Navigator.pop(context);
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => const EduPassApp(
                       initialPageIndex: 4,
                     )));
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('UpdateBio berhasil'),
-          duration: Duration(seconds: 1),
-        ));
+
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => const EduPassApp(
+        //               initialPageIndex: 4,
+        //             )));
+
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //   content: Text('UpdateBio berhasil'),
+        //   duration: Duration(seconds: 1),
+        // ));
+
+        final snackBar = SnackBar(
+          /// need to set following properties for best effect of awesome_snackbar_content
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: AwesomeSnackbarContent(
+              titleFontSize: 17,
+              messageFontSize: 15,
+              title: 'Success!',
+              message: 'Update Bio Successfully!',
+              contentType: ContentType.success,
+            ),
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
         debugPrint('UpdateBio berhasil');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

@@ -11,10 +11,10 @@ class GetUserService {
 
   Future<Map<String, dynamic>?> getUserByBiodateId() async {
     String? biodateId = await biodateIdManager.getBiodateId();
-    debugPrint('Biodate before API call: $biodateId');
+    // debugPrint('Biodate before API call: $biodateId');
 
     String? userId = await userIdManager.getId();
-    debugPrint('UserId before API call: $userId');
+    // debugPrint('UserId before API call: $userId');
 
     if (biodateId == null || userId == null) {
       throw Exception('BiodateId or UserId is null');
@@ -30,15 +30,15 @@ class GetUserService {
           },
         ),
       );
-      debugPrint('API Response: ${response.data}');
+      // debugPrint('API Response: ${response.data}');
 
       if (response.statusCode == 200) {
         List<dynamic> userDataList = response.data['data'];
-        debugPrint('UserDataList: $userDataList');
+        // debugPrint('UserDataList: $userDataList');
 
         if (userDataList.isNotEmpty) {
           var userData = userDataList[0]; // Langsung ambil data pertama
-          debugPrint('UserData: $userData');
+          // debugPrint('UserData: $userData');
           return userData;
         } else {
           debugPrint('UserDataList is empty');
@@ -133,7 +133,7 @@ class GetUserService {
   //   String? biodateId = await biodateIdManager.getBiodateId();
   //   try {
   //     var response = await Dio().get(
-  //       "http://192.168.1.5:3000/user/getUser?page=1&length=1&search=$biodateId",
+  //       "http://192.168.1.4:3000/user/getUser?page=1&length=1&search=$biodateId",
   //       options: Options(
   //         headers: {
   //           "Content-Type": "application/json",

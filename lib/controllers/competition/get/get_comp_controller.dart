@@ -8,7 +8,7 @@ class GetCompetitionController with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   int _currentPage = 1;
-  int _length = 2; // Batasi jumlah data per halaman
+  final int _length = 10; // Batasi jumlah data per halaman
   int _total = 0;
   bool _isLoadMore = false;
 

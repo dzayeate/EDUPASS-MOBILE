@@ -42,6 +42,9 @@ dependencies:
 
   # share
   share: ^2.0.4
+
+  # snackbar
+  awesome_snackbar_content: ^0.1.3
   
   ionicons: ^0.1.2 
   flutter_svg: ^2.0.4
@@ -60,6 +63,7 @@ dependencies:
 
   # image picker
   image_picker: ^0.8.5+3
+  image: ^4.0.15
 
   # provider
   provider: ^6.1.2

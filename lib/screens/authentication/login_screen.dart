@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             Text(
-                              "Pass",
+                              "Pas",
                               style: GoogleFonts.poppins(
                                 color: Colors.red[400],
                                 fontSize: 42,

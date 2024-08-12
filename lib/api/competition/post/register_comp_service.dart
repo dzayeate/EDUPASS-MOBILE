@@ -4,13 +4,14 @@ import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterCompetitionService {
-  static String? token;
-  static String? bioDateId;
+  static String? registrationId;
 
   final TokenManager tokenManager = TokenManager();
   final BiodateIdManager biodateIdManager = BiodateIdManager();
+  final RegistrationIdManager regsitrationIdManager = RegistrationIdManager();
 
   // register competition
   Future<bool> registerCompetition({
@@ -18,12 +19,12 @@ class RegisterCompetitionService {
     required String domicile,
     required String phoneNumber,
     String? docs,
+    String? teamName,
     required bool isTeam,
     required int teamSize,
     required List<String> teamMembers,
   }) async {
     String? token = await tokenManager.getToken();
-    String? bioDateId = await biodateIdManager.getBiodateId();
     try {
       // Create a Map for form data
       Map<String, dynamic> formDataMap = {
@@ -31,6 +32,7 @@ class RegisterCompetitionService {
         "domicile": domicile,
         "phoneNumber": phoneNumber,
         "isTeam": isTeam,
+        "nameTeam": teamName ?? "",
         "teamSize": isTeam ? teamSize : 0,
         "teamMembers": teamMembers.join(','),
       };
@@ -57,8 +59,6 @@ class RegisterCompetitionService {
         }
       }
 
-      debugPrint('Sending registration data to server: $formDataMap');
-
       var response = await Dio().post(
         "http://192.168.1.4:3000/competition/register/peserta",
         data: FormData.fromMap(formDataMap),
@@ -72,20 +72,52 @@ class RegisterCompetitionService {
 
       if (response.statusCode == 201) {
         // Update successful
-        return true;
+        if (response.data is Map<String, dynamic>) {
+          Map<String, dynamic> responseData = response.data;
+          Map<String, dynamic> data = responseData['data'];
+          registrationId = data['id'];
+
+          // Simpan token ke SharedPreferences
+          await regsitrationIdManager.saveId(registrationId!);
+
+          return true;
+        } else {
+          throw Exception('Failed to parse data');
+        }
       } else {
-        throw Exception(
-            'Failed to Register Competition: ${response.data['message']}');
+        throw Exception(response.data['message']);
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
-        debugPrint('Error 400: ${e.response?.data}');
-        throw Exception(
-            'Register Competition failed: ${e.response?.data['message']}');
+        throw Exception(e.response?.data['message']);
       } else {
-        debugPrint('Error: ${e.toString()}');
         throw Exception('Failed to Register Competition');
       }
     }
+  }
+}
+
+class RegistrationIdManager {
+  Future<void> saveId(String registrationId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('registrationId', registrationId);
+  }
+
+  Future<String?> getId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? registrationId = prefs.getString('registrationId');
+    // debugPrint('Retrieved registrationId: $registrationId');
+    return registrationId;
+  }
+
+  Future<void> deleteId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('registrationId');
+  }
+
+  // Fungsi untuk memeriksa registrationId
+  Future<void> checkregistrationId() async {
+    String? registrationId = await getId();
+    // debugPrint('registrationId yang tersimpan: $registrationId');
   }
 }

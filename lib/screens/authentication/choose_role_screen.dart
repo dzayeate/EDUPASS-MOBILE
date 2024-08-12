@@ -2,7 +2,6 @@ import 'package:edupass_mobile/screens/authentication/registration_role/general_
 import 'package:edupass_mobile/screens/authentication/registration_role/mhs_regis_screen.dart';
 import 'package:edupass_mobile/screens/authentication/registration_role/organizers_regis_screen.dart';
 import 'package:edupass_mobile/screens/authentication/registration_role/siswa_regis_screen.dart';
-import 'package:edupass_mobile/screens/components/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -122,15 +121,15 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            CustomDropDown(
-              items: ['User', 'Student', 'Mahasiswa', 'EO', 'Sponsor'],
-              hint: 'Choose role',
-              onChanged: (value) {
-                setState(() {
-                  _selectedRole = value;
-                });
-              },
-            ),
+            //  DropdownField(
+            //             label: 'Jenis Kelamin',
+            //             items: const ['SD', 'SMP', 'SMA', 'Mahasiswa', ''],
+            //             controller: updateController.genderController,
+            //             onChanged: (value) {
+            //               debugPrint(
+            //                   'Selected Gender: ${updateController.genderController.text}');
+            //             },
+            //           ),
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,

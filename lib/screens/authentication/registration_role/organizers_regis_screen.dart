@@ -1,7 +1,4 @@
-import 'package:edupass_mobile/screens/components/custom_dropdown.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
-import 'package:edupass_mobile/screens/components/custom_upload_field.dart';
-import 'package:edupass_mobile/screens/components/upload_file_field.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -92,13 +89,15 @@ class _OrganizersRegisterState extends State<OrganizersRegister> {
               ],
             ),
             const SizedBox(height: 16),
-            CustomDropDown(
-              items: const ['EO', 'Sponsor'],
-              hint: 'EO or Sponsor',
-              onChanged: (value) {
-                // Handle value change
-              },
-            ),
+            //  DropdownField(
+            //             label: 'Jenis Kelamin',
+            //             items: const ['EO', 'Sponsor', 'Juri', ''],
+            //             controller: updateController.genderController,
+            //             onChanged: (value) {
+            //               debugPrint(
+            //                   'Selected Gender: ${updateController.genderController.text}');
+            //             },
+            //           ),
             const SizedBox(height: 16),
             const CustomTextField(
               labelText: 'Nama Depan',
@@ -112,17 +111,12 @@ class _OrganizersRegisterState extends State<OrganizersRegister> {
               readOnly: false,
             ),
             const SizedBox(height: 16),
-            const CustomUploadFile(
-              hintText: 'Upload Foto',
-            ),
-            const SizedBox(height: 16),
-            CustomDropDown(
-              items: const ['SD', 'SMP', 'SMA', 'Mahasiswa'],
-              hint: 'Tingkat Instansi',
-              onChanged: (value) {
-                // Handle value change
-              },
-            ),
+            //  UploadFileField(
+            //   onFileSelected: _handleFileSelected,
+            //   allowedExtensions: const [
+            //     'jpg, jpeg, png,',
+            //   ], // Allow images and PDFs
+            // ),
             const SizedBox(height: 16),
             const CustomTextField(
               labelText: 'Provinsi',

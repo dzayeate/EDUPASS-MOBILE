@@ -1,11 +1,12 @@
 import 'package:edupass_mobile/api/get_user/get_user_service.dart';
 import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/notification/notification_screen.dart';
-import 'package:edupass_mobile/utils/event_card.dart';
+import 'package:edupass_mobile/screens/home/components/event_card.dart';
 import 'package:edupass_mobile/screens/home/components/filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,7 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
           .fetchCompetitions();
     });
 
-    return WillPopScope(
+    return
+        // WillPopScope(
+        //   onWillPop: () async {
+        //     // Menangani ketika tombol back ditekan
+        //     SystemNavigator.pop(); // Keluar dari aplikasi
+        //     return true;
+        //   },
+        //   child:
+        WillPopScope(
       onWillPop: () async {
         // Menangani ketika tombol back ditekan
         SystemNavigator.pop(); // Keluar dari aplikasi
@@ -176,14 +185,44 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
+              // Daftar Kompetisi Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Daftar Kompetisi',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EduPassApp(
+                                  initialPageIndex: 1,
+                                )),
+                      );
+                    },
+                    child: Text(
+                      'Lihat semua',
+                      style: GoogleFonts.poppins(color: Colors.indigo),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
               // Event Cards
               Expanded(
                 child: Consumer<GetCompetitionController>(
                   builder: (context, competitionController, child) {
                     if (competitionController.isLoading &&
                         competitionController.competitions.isEmpty) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (competitionController.errorMessage != null) {
@@ -196,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
+                            const Text(
                               'Kompetisi tidak ditemukan',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
@@ -226,41 +265,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemBuilder: (context, index) {
                               if (index ==
                                   competitionController.competitions.length) {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               }
                               final competition =
                                   competitionController.competitions[index];
+                              // Mendapatkan previewUrl dan melakukan validasi
+                              final String? previewUrl =
+                                  competition['thumbnail']['previewUrl'] !=
+                                          "null"
+                                      ? competition['thumbnail']['previewUrl']
+                                      : null;
                               return EventCard(
                                 id: competition['id'],
                                 title: competition['name'],
-                                date: competition['date'],
+                                startDate: competition['startDate'],
+                                endDate: competition['endDate'],
                                 location: competition['location'],
                                 peopleRegistered:
-                                    '', // Data ini tidak ada di API
-                                label: competition[
-                                    'category'], // Data ini tidak ada di API
-                                label2: competition[
-                                    'platform'], // Data ini tidak ada di API
-                                imageUrl:
-                                    'assets/images/competition_1.png', // Adjust image asset
-
-                                // imageUrl: competition['banner'] != null &&
-                                //         competition['banner'].isNotEmpty
-                                //     ? Image.network(
-                                //         competition['banner'],
-                                //         width: 100,
-                                //         height: 165,
-                                //         fit: BoxFit.cover,
-                                //       )
-                                //     : Image.asset(
-                                //         'assets/images/competition_1.png',
-                                //         width: 100,
-                                //         height: 165,
-                                //         fit: BoxFit.cover,
-                                //       ), // Adjust image asset
-                              );
+                                    competition['registrationCount'].toString(),
+                                label: competition['category'],
+                                labelTwo: competition['platform'],
+                                imageUrl: previewUrl != null
+                                    ? previewUrl.replaceFirst(
+                                        "localhost", "192.168.1.4")
+                                    : null,
+                              ); // Adjust image asset
                             },
                           ),
                         ),

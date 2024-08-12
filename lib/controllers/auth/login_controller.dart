@@ -26,16 +26,16 @@ class LoginController {
 
       if (loggedIn) {
         // Navigate ke halaman setelah login sukses (contoh: EduPassApp)
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EduPassApp()));
-        print('Login successful');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const EduPassApp()));
+        debugPrint('Login successful');
       } else {
         // Menampilkan pesan kesalahan jika login gagal
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Login failed'),
           duration: Duration(seconds: 2),
         ));
-        print('Login failed');
+        debugPrint('Login failed');
       }
     } catch (e) {
       // Sembunyikan loading dialog jika terjadi exception
@@ -47,7 +47,7 @@ class LoginController {
         duration: const Duration(seconds: 2),
       ));
 
-      print('Error during login: $e');
+      debugPrint('Error during login: $e');
     }
   }
 }

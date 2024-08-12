@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 

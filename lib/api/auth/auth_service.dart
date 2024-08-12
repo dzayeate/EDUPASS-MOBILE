@@ -209,6 +209,28 @@ class AuthService {
         "pupils": pupils,
       };
 
+      // // Get MIME type for the files and add to formDataMap if not null
+      // if (proof != null && proof.isNotEmpty) {
+      //   String? proofMimeType = lookupMimeType(proof);
+      //   if (proofMimeType != null) {
+      //     // Check if the file is a PDF
+      //     if (proofMimeType == 'application/pdf') {
+      //       MultipartFile proofMultipartFile = await MultipartFile.fromFile(
+      //         proof,
+      //         filename: 'proof.pdf',
+      //         contentType: MediaType.parse(proofMimeType),
+      //       );
+      //       formDataMap["proof"] = proofMultipartFile;
+      //     } else {
+      //       debugPrint('The file is not a PDF');
+      //       throw Exception('The file is not a PDF');
+      //     }
+      //   } else {
+      //     debugPrint('Invalid proof MIME type');
+      //     throw Exception('Invalid proof MIME type');
+      //   }
+      // }
+
       // Get MIME type for the files and add to formDataMap if not null
       if (proof != null && proof.isNotEmpty) {
         String? proofMimeType = lookupMimeType(proof);

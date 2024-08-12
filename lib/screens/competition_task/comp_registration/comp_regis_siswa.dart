@@ -148,8 +148,12 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
               ),
             ),
             const SizedBox(height: 16),
-            UploadFileField(onFileSelected: _handleFileSelected),
-            const SizedBox(height: 24),
+            UploadFileField(
+              onFileSelected: _handleFileSelected,
+              allowedExtensions: const [
+                'pdf',
+              ], // Allow images and PDFs
+            ),
             const SizedBox(height: 24),
             CheckboxListTile(
               title: const Text(

@@ -1,12 +1,9 @@
 import 'package:edupass_mobile/api/competition/get/scheduled/get_scheduled_comp_service.dart';
 import 'package:edupass_mobile/models/event/event_model.dart';
 import 'package:edupass_mobile/screens/calendar_competitions/event_detail_page.dart';
-import 'package:edupass_mobile/screens/edupass_app.dart';
-import 'package:edupass_mobile/utils/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:cached_network_image/cached_network_image.dart'; // Make sure to adjust this import based on your file structure
+import 'package:google_fonts/google_fonts.dart'; // Make sure to adjust this import based on your file structure
 
 class CalendarCompetition extends StatefulWidget {
   const CalendarCompetition({super.key});
@@ -50,7 +47,15 @@ class _CalendarCompetitionState extends State<CalendarCompetition> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar App'),
+        title: Text(
+          'Calendar Events',
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -73,16 +78,24 @@ class _CalendarCompetitionState extends State<CalendarCompetition> {
               itemCount: _getEventsForDay(_selectedDay).length,
               itemBuilder: (context, index) {
                 final event = _getEventsForDay(_selectedDay)[index];
-                return ListTile(
-                  title: Text(event.title),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EventDetailPage(event: event),
-                      ),
-                    );
-                  },
+                return Column(
+                  children: [
+                    const Text("List Events"),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    ListTile(
+                      title: Text(event.title),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailPage(event: event),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 );
               },
             ),

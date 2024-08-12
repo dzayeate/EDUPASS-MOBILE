@@ -1,7 +1,6 @@
 import 'package:edupass_mobile/models/notification/notification_model.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NotificationScreen extends StatelessWidget {
