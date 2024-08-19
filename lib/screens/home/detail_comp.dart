@@ -1,3 +1,5 @@
+import 'package:edupass_mobile/controllers/users/profile_user_controller.dart';
+import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:edupass_mobile/api/competition/get/get_comp_service.dart';
 import 'package:edupass_mobile/screens/competition_task/comp_registration/comp_regis_mhs.dart';
@@ -20,6 +22,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GetCompetitionService _competitionService = GetCompetitionService();
+  final ProfileUserController _profileUserController = ProfileUserController();
 
   bool _isLoading = true;
   String? _errorMessage;
@@ -55,6 +58,74 @@ class _DetailCompScreenState extends State<DetailCompScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _handleRegistration() {
+    final roleName = _profileUserController.userData?['role']?['name'];
+    final isVerified = _profileUserController.userData?['isVerified'] ?? false;
+
+    if (roleName != 'Siswa' && roleName != 'Mahasiswa') {
+      // Role tidak sesuai
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Anda Belum Melakukan Verifikasi'),
+            content:
+                const Text('Apakah Anda ingin Melakukan Verifikasi sekarang?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  // Navigate to change role screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ChooseRoleScreen()),
+                  );
+                },
+                child: const Text('Ganti Role'),
+              ),
+            ],
+          );
+        },
+      );
+    } else if (!isVerified) {
+      // Akun belum terverifikasi
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Akun Belum Terverifikasi'),
+            content: const Text(
+                'Akun Anda belum terverifikasi. Silakan hubungi tim admin yang bersangkutan untuk verifikasi akun.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Tutup'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // User is allowed to register
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CompetitionMhsRegis(
+                  id: widget.id,
+                )),
+      );
+    }
   }
 
   @override
@@ -107,6 +178,28 @@ class _DetailCompScreenState extends State<DetailCompScreen>
     bool isCompetitionOpen =
         today.isAfter(startDate) && today.isBefore(endDate);
 
+    // Mendapatkan URL gambar dan melakukan validasi
+    final String? imageUrl = _competitionDetail!['banner']['previewUrl']
+        ?.replaceFirst("localhost", "192.168.1.4");
+
+    // Widget gambar dengan pengecekan null
+    final Widget imageWidget = ClipRRect(
+      borderRadius: BorderRadius.circular(10), // Adjust the radius as needed
+      child: imageUrl != null
+          ? Image.network(
+              imageUrl, // Network image
+              width: 1080,
+              height: 150,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
+              'assets/images/image-detail.png', // Local asset image
+              width: 1080,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+    );
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -130,18 +223,20 @@ class _DetailCompScreenState extends State<DetailCompScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                      image: AssetImage(
-                          'assets/images/image-detail.png'), // Ubah sesuai dengan path gambar Anda
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                // Gambar dengan pengecekan null
+                imageWidget,
+                // Container(
+                //   width: double.infinity,
+                //   height: 200,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     image: const DecorationImage(
+                //       image: AssetImage(
+                //           'assets/images/image-detail.png'), // Ubah sesuai dengan path gambar Anda
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -356,24 +451,14 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         width: 16), // Add some spacing between the buttons
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: isCompetitionOpen
-                            ? () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CompetitionMhsRegis(
-                                            id: widget.id,
-                                          )),
-                                );
-                              }
-                            : null, // Button tidak aktif jika kompetisi ditutup
+                        onPressed:
+                            isCompetitionOpen ? _handleRegistration : null,
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12), // Adjust padding here
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          backgroundColor: Colors.indigo, // Background color
+                          backgroundColor: Colors.indigo,
                         ),
                         child: Text(
                           isCompetitionOpen

@@ -36,6 +36,10 @@ class ChangePasswordController {
 
       if (changedPass) {
         // Navigate ke halaman setelah login sukses (contoh: EduPassApp)
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Change Password success'),
+          duration: Duration(seconds: 2),
+        ));
         print('Change Password successful');
       } else {
         // Menampilkan pesan kesalahan jika login gagal

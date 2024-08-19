@@ -4,7 +4,6 @@ import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 
 class SubmitCompetitionService {
   final TokenManager tokenManager = TokenManager();
-  final RegistrationIdManager registrationIdManager = RegistrationIdManager();
 
   // register competition
   Future<bool> submitCompetition({
@@ -12,12 +11,11 @@ class SubmitCompetitionService {
     required String url,
   }) async {
     String? token = await tokenManager.getToken();
-    String? idRegistration = await registrationIdManager.getId();
 
     try {
       // Create a Map for form data
       var response = await Dio().post(
-        "http://192.168.1.4:3000/competition/submission",
+        "http://103.141.61.6/competition/submission",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -25,7 +23,7 @@ class SubmitCompetitionService {
           },
         ),
         data: {
-          "registrationId": idRegistration,
+          "registrationId": registrationId,
           "url": url,
         },
       );

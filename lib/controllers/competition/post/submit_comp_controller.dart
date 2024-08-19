@@ -1,5 +1,4 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:edupass_mobile/api/competition/post/register_comp_service.dart';
 import 'package:edupass_mobile/api/competition/post/submit_comp_service.dart';
 import 'package:edupass_mobile/utils/dialog_helper.dart';
 import 'package:flutter/material.dart';
@@ -10,21 +9,17 @@ class SubmitCommpController {
 
   // Controller untuk input url
   TextEditingController urlController = TextEditingController();
-  String? registrationId;
 
   // Fungsi untuk melakukan submit competition
-  Future<void> submitCompetition(BuildContext context) async {
+  Future<void> submitCompetition(BuildContext context, registrationId) async {
     // Tampilkan loading dialog
     DialogHelper.showLoading(context);
 
-    final RegistrationIdManager regsitrationIdManager = RegistrationIdManager();
-    registrationId = await regsitrationIdManager.getId();
-
-    String password = urlController.text.trim();
+    String urlTask = urlController.text.trim();
 
     try {
       bool submitted = await _submitCompetitionService.submitCompetition(
-          registrationId: registrationId!, url: password);
+          registrationId: registrationId, url: urlTask);
       // Sembunyikan loading dialog setelah selesai
       DialogHelper.hideLoading(context);
 

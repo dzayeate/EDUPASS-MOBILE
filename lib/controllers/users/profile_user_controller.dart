@@ -28,4 +28,40 @@ class ProfileUserController extends ChangeNotifier {
     notifyListeners();
     _fetchUserData();
   }
+
+  bool isStudentOrMahasiswa() {
+    final roleName = userData?['role']?['name'];
+    return roleName == 'Siswa' || roleName == 'Mahasiswa';
+  }
+
+  List<ActivityField> getUserActivities() {
+    if (userData != null && userData!['activities'] != null) {
+      final activities = userData!['activities'] as List<dynamic>;
+      return activities.map((json) => ActivityField.fromJson(json)).toList();
+    }
+    return [];
+  }
+}
+
+class ActivityField {
+  final String competitionName;
+  final String competitionStartDate;
+  final String competitionEndDate;
+  final String status;
+
+  ActivityField({
+    required this.competitionName,
+    required this.competitionStartDate,
+    required this.competitionEndDate,
+    required this.status,
+  });
+
+  factory ActivityField.fromJson(Map<String, dynamic> json) {
+    return ActivityField(
+      competitionName: json['competitionName'],
+      competitionStartDate: json['competitionStartDate'],
+      competitionEndDate: json['competitionEndDate'],
+      status: json['status'],
+    );
+  }
 }

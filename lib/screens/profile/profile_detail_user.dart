@@ -32,13 +32,6 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
     debugPrint('File path: $filePath');
   }
 
-  // void dispose() {
-  //   _selectedImagePath = null;
-  //   _selectedBackgroundPath = null;
-  //   debugPrint("Image : $_selectedImagePath");
-  //   debugPrint("Proof : $_selectedBackgroundPath");
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -94,6 +87,9 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
             _dataInitialized = true;
           }
 
+          // Cek role pengguna
+          String roleName = profileController.userData!['role']['name'] ?? '';
+
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -121,15 +117,6 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
                                   ['previewUrl']
                               ?.replaceAll("localhost", "192.168.1.4"),
                     ),
-                    // const SizedBox(height: 20),
-                    // if (_selectedImagePath != null) ...[
-                    //   Text('Selected file: $_selectedImagePath'),
-                    //   // Jika Anda ingin menampilkan gambar yang diunggah
-                    //   Image.file(
-                    //     File(_selectedImagePath!),
-                    //     height: 200,
-                    //   ),
-                    // ],
                     const SizedBox(height: 16),
                     CustomTextField(
                       labelText: 'Nama Depan',
@@ -174,17 +161,6 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
                             'Selected Gender: ${updateController.genderController.text}');
                       },
                     ),
-                    // const SizedBox(height: 16),
-                    // UploadImageField(onFileSelected: _handleBackgroundSelected),
-                    // const SizedBox(height: 20),
-                    // if (_selectedBackgroundPath != null) ...[
-                    //   Text('Selected file: $_selectedBackgroundPath'),
-                    //   // Jika Anda ingin menampilkan gambar yang diunggah
-                    //   Image.file(
-                    //     File(_selectedBackgroundPath!),
-                    //     height: 200,
-                    //   ),
-                    // ],
                     const SizedBox(height: 16),
                     CustomTextField(
                       labelText: 'Provinsi',
@@ -211,7 +187,7 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
-                      labelText: 'Nama Instansi',
+                      labelText: 'Nama Institusi',
                       hintText: 'Harvard University',
                       controller: updateController.institutionNameController,
                     ),
@@ -222,11 +198,14 @@ class _ProfileDetailUserState extends State<ProfileDetailUser> {
                       controller: updateController.studyFieldController,
                     ),
                     const SizedBox(height: 16),
-                    CustomTextField(
-                      labelText: 'NIM/NISN',
-                      hintText: '123123123',
-                      controller: updateController.uniqueIdController,
-                    ),
+                    if (roleName == 'Umum' ||
+                        roleName == 'Mahasiswa' ||
+                        roleName == 'Siswa')
+                      CustomTextField(
+                        labelText: 'NIM/NISN',
+                        hintText: '123123123',
+                        controller: updateController.uniqueIdController,
+                      ),
                     const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: () {

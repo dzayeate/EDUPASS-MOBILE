@@ -41,6 +41,7 @@ class EventCard extends StatelessWidget {
               width: 100, // Adjust this value based on your design
               height: 150,
               fit: BoxFit.cover,
+              // fit: BoxFit.contain,
             )
           : Image.asset(
               'assets/images/competition_1.png', // Default image
