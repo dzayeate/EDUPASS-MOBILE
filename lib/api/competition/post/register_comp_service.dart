@@ -4,14 +4,10 @@ import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterCompetitionService {
-  static String? registrationId;
-
   final TokenManager tokenManager = TokenManager();
   final BiodateIdManager biodateIdManager = BiodateIdManager();
-  final RegistrationIdManager regsitrationIdManager = RegistrationIdManager();
 
   // register competition
   Future<bool> registerCompetition({
@@ -60,7 +56,7 @@ class RegisterCompetitionService {
       }
 
       var response = await Dio().post(
-        "http://192.168.1.4:3000/competition/register/peserta",
+        "http://103.141.61.6/competition/register/peserta",
         data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {
@@ -71,19 +67,16 @@ class RegisterCompetitionService {
       );
 
       if (response.statusCode == 201) {
-        // Update successful
-        if (response.data is Map<String, dynamic>) {
-          Map<String, dynamic> responseData = response.data;
-          Map<String, dynamic> data = responseData['data'];
-          registrationId = data['id'];
+        // // Update successful
+        // if (response.data is Map<String, dynamic>) {
+        //   Map<String, dynamic> responseData = response.data;
+        //   Map<String, dynamic> data = responseData['data'];
 
-          // Simpan token ke SharedPreferences
-          await regsitrationIdManager.saveId(registrationId!);
-
-          return true;
-        } else {
-          throw Exception('Failed to parse data');
-        }
+        //   return true;
+        // } else {
+        //   throw Exception('Failed to parse data');
+        // }
+        return true;
       } else {
         throw Exception(response.data['message']);
       }
@@ -94,30 +87,5 @@ class RegisterCompetitionService {
         throw Exception('Failed to Register Competition');
       }
     }
-  }
-}
-
-class RegistrationIdManager {
-  Future<void> saveId(String registrationId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('registrationId', registrationId);
-  }
-
-  Future<String?> getId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? registrationId = prefs.getString('registrationId');
-    // debugPrint('Retrieved registrationId: $registrationId');
-    return registrationId;
-  }
-
-  Future<void> deleteId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('registrationId');
-  }
-
-  // Fungsi untuk memeriksa registrationId
-  Future<void> checkregistrationId() async {
-    String? registrationId = await getId();
-    // debugPrint('registrationId yang tersimpan: $registrationId');
   }
 }

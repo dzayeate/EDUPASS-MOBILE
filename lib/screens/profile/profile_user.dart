@@ -38,6 +38,8 @@ class ProfileUser extends StatelessWidget {
                 } else if (controller.userData == null) {
                   return ErrorScreen(onRetry: controller.retryFetchUserData);
                 } else {
+                  // Mendapatkan userId
+                  final userId = controller.userData?['id'];
                   // Check if any fields in 'biodate' are empty or null
                   bool isBiodateIncomplete =
                       controller.userData?['biodate'].values.any((value) =>
@@ -256,7 +258,7 @@ class ProfileUser extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const ActivityUser()),
+                                            ActivityUser(userId: userId)),
                                   );
                                 },
                               ),
@@ -331,7 +333,7 @@ class ProfileUser extends StatelessWidget {
                                   await UserIdManager().deleteId();
                                   // context.go('/');
 
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>

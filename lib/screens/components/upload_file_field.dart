@@ -47,23 +47,32 @@ class _UploadFileFieldState extends State<UploadFileField> {
         return;
       }
 
-      // Check image dimensions
       final filePath = file.path!;
-      final imageBytes = await File(filePath).readAsBytes();
-      final image = img.decodeImage(imageBytes);
+      final fileExtension = file.extension?.toLowerCase();
 
-      if (image == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Unable to process image')),
-        );
-        return;
-      }
+      if (fileExtension == 'jpg' ||
+          fileExtension == 'jpeg' ||
+          fileExtension == 'png') {
+        // Check image dimensions only for image files
+        final imageBytes = await File(filePath).readAsBytes();
+        final image = img.decodeImage(imageBytes);
 
-      if (image.width != 300 || image.height != 300) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Image must be 300x300 pixels')),
-        );
-        return;
+        if (image == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Unable to process image')),
+          );
+          return;
+        }
+
+        // Additional checks for image (if needed)
+        // if (image.width != 300 || image.height != 300) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(content: Text('Image must be 300x300 pixels')),
+        //   );
+        //   return;
+        // }
+      } else if (fileExtension == 'pdf') {
+        // Additional checks for PDF (if needed)
       }
 
       setState(() {

@@ -68,9 +68,9 @@ class UpdateUserController {
     uniqueIdController.dispose();
   }
 
-  bool fileExists(String path) {
-    return File(path).existsSync();
-  }
+  // bool fileExists(String path) {
+  //   return File(path).existsSync();
+  // }
 
   Future<void> updateBio(BuildContext context) async {
     DialogHelper.showLoading(context);

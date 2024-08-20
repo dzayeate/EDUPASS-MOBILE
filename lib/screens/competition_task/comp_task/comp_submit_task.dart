@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SubmitCompetitionTask extends StatefulWidget {
-  const SubmitCompetitionTask({super.key});
+  final String registrationId;
+  const SubmitCompetitionTask({super.key, required this.registrationId});
 
   @override
   State<SubmitCompetitionTask> createState() => _SubmitCompetitionTaskState();
@@ -85,7 +86,8 @@ class _SubmitCompetitionTaskState extends State<SubmitCompetitionTask> {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                submitCompetitionController.submitCompetition(context);
+                submitCompetitionController.submitCompetition(
+                    context, widget.registrationId);
               },
               style: ElevatedButton.styleFrom(
                 padding:

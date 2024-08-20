@@ -1,4 +1,5 @@
 import 'package:edupass_mobile/screens/authentication/change_password/change_password.dart';
+import 'package:edupass_mobile/screens/authentication/choose_role_screen.dart';
 import 'package:edupass_mobile/screens/edupass_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +20,8 @@ class SettingScreen extends StatelessWidget {
         color: Colors.white,
         child: ListView(
           children: [
-            _buildSettingsOption(context, 'Account Privacy'),
             _buildSettingsOption(context, 'Change Password'),
-            // _buildSettingsOption(context, 'Delete Account'),
-            _buildSettingsOption(context, 'Tags/Interest'),
-            _buildSettingsOption(context, 'Social Media'),
+            _buildSettingsOption(context, 'Change Role'),
           ],
         ),
       ),
@@ -41,6 +39,12 @@ class SettingScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => const ChangePasswordScreen()),
+          );
+        }
+        if (title == 'Change Role') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChooseRoleScreen()),
           );
         } else {
           // Handle other options

@@ -1,4 +1,4 @@
-import 'package:edupass_mobile/api/competition/get/scheduled/get_scheduled_comp_service.dart';
+import 'package:edupass_mobile/api/competition/get/get_comp_scheduled_service.dart';
 import 'package:edupass_mobile/models/event/event_model.dart';
 import 'package:edupass_mobile/screens/calendar_competitions/event_detail_page.dart';
 import 'package:flutter/material.dart';

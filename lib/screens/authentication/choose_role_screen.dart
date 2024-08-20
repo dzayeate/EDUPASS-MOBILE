@@ -1,7 +1,5 @@
-import 'package:edupass_mobile/screens/authentication/registration_role/general_regis_screen.dart';
-import 'package:edupass_mobile/screens/authentication/registration_role/mhs_regis_screen.dart';
-import 'package:edupass_mobile/screens/authentication/registration_role/organizers_regis_screen.dart';
-import 'package:edupass_mobile/screens/authentication/registration_role/siswa_regis_screen.dart';
+import 'package:edupass_mobile/controllers/auth/change_role_controller.dart';
+import 'package:edupass_mobile/screens/components/dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,36 +11,13 @@ class ChooseRoleScreen extends StatefulWidget {
 }
 
 class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
-  String? _selectedRole;
+  final ChangeRoleController _changeRolecontroller = ChangeRoleController();
 
-  void _navigateToRoleScreen() {
-    if (_selectedRole == null) return;
-
-    Widget screen;
-    switch (_selectedRole) {
-      case 'User':
-        screen = const GeneralRegister();
-        break;
-      case 'Student':
-        screen = const SiswaRegister();
-        break;
-      case 'Mahasiswa':
-        screen = const MahasiswaRegister();
-        break;
-      case 'EO':
-        screen = const OrganizersRegister();
-        break;
-      case 'Sponsor':
-        screen = const OrganizersRegister();
-        break;
-      default:
-        return;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => screen),
-    );
+  @override
+  void dispose() {
+    _changeRolecontroller
+        .dispose(); // Panggil dispose dari controller saat widget ini dihancurkan
+    super.dispose();
   }
 
   @override
@@ -52,7 +27,6 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Add back button functionality here
             Navigator.pop(context);
           },
         ),
@@ -85,7 +59,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Get Started',
+              'Ganti Role',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -93,7 +67,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Please enter your biodata',
+              'Pilih Role sesuai keinginan anda',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -121,20 +95,43 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            //  DropdownField(
-            //             label: 'Jenis Kelamin',
-            //             items: const ['SD', 'SMP', 'SMA', 'Mahasiswa', ''],
-            //             controller: updateController.genderController,
-            //             onChanged: (value) {
-            //               debugPrint(
-            //                   'Selected Gender: ${updateController.genderController.text}');
-            //             },
-            //           ),
+            DropdownButtonFormField<String>(
+              value: null,
+              hint: const Text('Ganti Role'),
+              items: const [
+                DropdownMenuItem(value: 'Siswa', child: Text('Siswa')),
+                DropdownMenuItem(value: 'Mahasiswa', child: Text('Mahasiswa')),
+                DropdownMenuItem(
+                    value: 'Perusahaan', child: Text('Perusahaan')),
+                DropdownMenuItem(value: 'EO', child: Text('EO')),
+                DropdownMenuItem(value: 'Sponsor', child: Text('Sponsor')),
+                DropdownMenuItem(value: 'Juri', child: Text('Juri')),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _changeRolecontroller.roleNameController.text = value ?? '';
+                });
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _navigateToRoleScreen,
+                onPressed: () {
+                  if (_changeRolecontroller.roleNameController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Silahkan pilih role terlebih dahulu'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    return;
+                  }
+                  _changeRolecontroller.changeRole(context);
+                },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   backgroundColor: Colors.indigo,

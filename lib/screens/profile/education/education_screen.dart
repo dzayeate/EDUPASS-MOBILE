@@ -52,31 +52,9 @@ class _EducationScreenState extends State<EducationScreen> {
 
           // Initialize UpdateUserController's text controllers with data from ProfileUserController
           if (!_dataInitialized) {
-            updateController.firstNameController.text =
-                profileController.userData!['biodate']['firstName'] ?? '';
-            updateController.lastNameController.text =
-                profileController.userData!['biodate']['lastName'] ?? '';
-            String birthDate =
-                profileController.userData!['biodate']['birthDate'] ?? '';
-            if (birthDate.isNotEmpty) {
-              updateController.birthDateController.text =
-                  birthDate.substring(0, 10); // Format date
-            }
-            updateController.genderController.text =
-                profileController.userData!['biodate']['gender'] ?? '';
-            updateController.phoneController.text =
-                profileController.userData!['biodate']['phone'] ?? '';
-            updateController.addressController.text =
-                profileController.userData!['biodate']['address'] ?? '';
-            updateController.provinceController.text =
-                profileController.userData!['biodate']['province'] ?? '';
-            updateController.regenciesController.text =
-                profileController.userData!['biodate']['regencies'] ?? '';
             updateController.institutionNameController.text =
                 profileController.userData!['biodate']['institutionName'] ?? '';
             updateController.studyFieldController.text =
-                profileController.userData!['biodate']['field'] ?? '';
-            updateController.uniqueIdController.text =
                 profileController.userData!['biodate']['pupils'] ?? '';
             // Menggunakan extractFileName untuk mendapatkan nama file
             String proofUrl =
@@ -113,7 +91,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 child: Column(
                   children: [
                     CustomTextField(
-                      labelText: 'Nama Instansi',
+                      labelText: 'Nama Institusi',
                       enabled: false,
                       hintText: 'Harvard University',
                       controller: updateController.institutionNameController,
