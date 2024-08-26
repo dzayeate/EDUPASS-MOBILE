@@ -44,14 +44,12 @@ class _EduPassAppState extends State<EduPassApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: _pageIndex == 2
-          ? null
-          : BottomNavBar(
-              currentIndex: _pageIndex,
-              onTap: (index) {
-                updatePageIndex(index);
-              },
-            ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _pageIndex,
+        onTap: (index) {
+          updatePageIndex(index);
+        },
+      ),
       body: _pages[_pageIndex],
     );
   }

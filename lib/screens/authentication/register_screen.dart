@@ -199,12 +199,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            icon: Image.asset('assets/images/google.png'),
+                            icon: Image.asset('assets/icons/google.png'),
                             onPressed: () {},
                           ),
                           const SizedBox(width: 20),
                           IconButton(
-                            icon: Image.asset('assets/images/facebook.png'),
+                            icon: Image.asset('assets/icons/facebook.png'),
                             onPressed: () {},
                           ),
                         ],

@@ -209,42 +209,44 @@ class AuthService {
         "pupils": pupils,
       };
 
-      // // Get MIME type for the files and add to formDataMap if not null
-      // if (proof != null && proof.isNotEmpty) {
-      //   String? proofMimeType = lookupMimeType(proof);
-      //   if (proofMimeType != null) {
-      //     // Check if the file is a PDF
-      //     if (proofMimeType == 'application/pdf') {
-      //       MultipartFile proofMultipartFile = await MultipartFile.fromFile(
-      //         proof,
-      //         filename: 'proof.pdf',
-      //         contentType: MediaType.parse(proofMimeType),
-      //       );
-      //       formDataMap["proof"] = proofMultipartFile;
-      //     } else {
-      //       debugPrint('The file is not a PDF');
-      //       throw Exception('The file is not a PDF');
-      //     }
-      //   } else {
-      //     debugPrint('Invalid proof MIME type');
-      //     throw Exception('Invalid proof MIME type');
-      //   }
-      // }
-
-      // Get MIME type for the files and add to formDataMap if not null
+      // Get MIME type for the proof file and add to formDataMap if not null
       if (proof != null && proof.isNotEmpty) {
         String? proofMimeType = lookupMimeType(proof);
         if (proofMimeType != null) {
-          MultipartFile proofMultipartFile = await MultipartFile.fromFile(
-            proof,
-            filename: 'proof.png',
-            contentType: MediaType.parse(proofMimeType),
-          );
-          formDataMap["proof"] = proofMultipartFile;
+          // Check if the file is a PDF, JPG, JPEG, or PNG
+          if (proofMimeType == 'application/pdf' ||
+              proofMimeType == 'image/jpeg' ||
+              proofMimeType == 'image/jpg' ||
+              proofMimeType == 'image/png') {
+            MultipartFile proofMultipartFile = await MultipartFile.fromFile(
+              proof,
+              filename: 'proof.${proofMimeType.split('/').last}',
+              contentType: MediaType.parse(proofMimeType),
+            );
+            formDataMap["proof"] = proofMultipartFile;
+          } else {
+            debugPrint('The file is not a valid type');
+            throw Exception('The file is not a valid type');
+          }
         } else {
           debugPrint('Invalid proof MIME type');
+          throw Exception('Invalid proof MIME type');
         }
       }
+      // Get MIME type for the files and add to formDataMap if not null
+      // if (proof != null && proof.isNotEmpty) {
+      //   String? proofMimeType = lookupMimeType(proof);
+      //   if (proofMimeType != null) {
+      //     MultipartFile proofMultipartFile = await MultipartFile.fromFile(
+      //       proof,
+      //       filename: 'proof.pdf',
+      //       contentType: MediaType.parse(proofMimeType),
+      //     );
+      //     formDataMap["proof"] = proofMultipartFile;
+      //   } else {
+      //     debugPrint('Invalid proof MIME type');
+      //   }
+      // }
 
       if (image != null && image.isNotEmpty) {
         String? imageMimeType = lookupMimeType(image);
@@ -347,114 +349,34 @@ class AuthService {
       throw Exception('Failed to change password');
     }
   }
+
+  // change role
+  Future<bool> changeRole({
+    required String roleName,
+  }) async {
+    String? token = await tokenManager.getToken();
+    try {
+      var response = await Dio().post(
+        "http://192.168.1.4:3000/user/change-role",
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: {
+          "roleName": roleName,
+        },
+      );
+      if (response.statusCode == 200) {
+        // Hapus token dari SharedPreferences
+        return true;
+      } else {
+        throw Exception('Failed to change role');
+      }
+    } on DioException catch (e) {
+      debugPrint('Error: ${e.toString()}');
+      throw Exception('Failed to change role');
+    }
+  }
 }
-  // // SharedPrefs Token
-  // Future<void> saveToken(String token) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('token', token);
-  // }
-
-  // Future<String?> getToken() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('token');
-  // }
-
-  // Future<void> deleteToken() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.remove('token');
-  // }
-
-  // Future<bool> isLoggedIn() async {
-  //   String? token = await getToken();
-  //   return token != null;
-  // }
-
-  // // Fungsi untuk memeriksa token
-  // Future<void> checkToken() async {
-  //   String? token = await getToken();
-  //   debugPrint('Token yang tersimpan: $token');
-  // }
-
-  // // SharedPrefs Biodate Id
-  // Future<void> savebiodateId(String biodateId) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('biodateId', biodateId);
-  // }
-
-  // Future<String?> getbiodateId() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('biodateId');
-  // }
-
-  // Future<void> deletebiodateId() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.remove('biodateId');
-  // }
-
-  // // Fungsi untuk memeriksa biodateId
-  // Future<void> checkbiodateId() async {
-  //   String? biodateId = await getbiodateId();
-  //   debugPrint('biodateId yang tersimpan: $biodateId');
-  // }
-
-
-//   Future<bool> register({
-//     required String email,
-//     required String password,
-//     required String confirmPassword,
-//     required String roleName,
-//     required String firstName,
-//     required String lastName,
-//     required String nik,
-//     required String institutionName,
-//     required String institutionLevel,
-//     required String province,
-//     required String regencies,
-//     required String studyField,
-//     required String reason,
-//     required String image,
-//   }) async {
-//     try {
-//       var response = await Dio().post(
-//         "http://192.168.1.7:3000/auth/register",
-//         data: FormData.fromMap({
-//           "email": email,
-//           "password": password,
-//           "confirmPassword": confirmPassword,
-//           "roleName": roleName,
-//           "firstName": firstName,
-//           "lastName": lastName,
-//           "nik": nik,
-//           "institutionName": institutionName,
-//           "institutionLevel": institutionLevel,
-//           "province": province,
-//           "regencies": regencies,
-//           "studyField": studyField,
-//           "reason": reason,
-//           "image": image,
-//         }),
-//         options: Options(
-//           headers: {
-//             "Content-Type": "multipart/form-data",
-//           },
-//         ),
-//       );
-
-//       if (response.statusCode == 201) {
-//         // Registration successful
-//         return true;
-//       } else {
-//         throw Exception('Failed to register: ${response.data['message']}');
-//       }
-//     } on DioException catch (e) {
-//       if (e.response?.statusCode == 400) {
-//         debugPrint('Error 400: ${e.response?.data}');
-//         throw Exception('Registration failed: ${e.response?.data['message']}');
-//       } else {
-//         debugPrint('Error: ${e.toString()}');
-//         throw Exception('Failed to register');
-//       }
-//     }
-//   }
-// }
-// }

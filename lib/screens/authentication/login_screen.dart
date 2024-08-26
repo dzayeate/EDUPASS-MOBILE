@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
                             child: Text(
                               'Login',
@@ -138,12 +138,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: Image.asset('assets/images/google.png'),
+                              icon: Image.asset('assets/icons/google.png'),
                               onPressed: () {},
                             ),
                             const SizedBox(width: 20),
                             IconButton(
-                              icon: Image.asset('assets/images/facebook.png'),
+                              icon: Image.asset('assets/icons/facebook.png'),
                               onPressed: () {},
                             ),
                           ],

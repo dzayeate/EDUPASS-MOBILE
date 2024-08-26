@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:edupass_mobile/api/competition/get/get_comp_service.dart';
 import 'package:edupass_mobile/controllers/competition/post/register_comp_controller.dart';
+import 'package:edupass_mobile/controllers/users/profile_user_controller.dart';
 import 'package:edupass_mobile/screens/components/custom_number_field.dart';
 import 'package:edupass_mobile/screens/components/custom_text_field.dart';
 import 'package:edupass_mobile/screens/components/upload_file_field.dart';
@@ -27,6 +28,7 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
   List<TextEditingController> anggotaControllers = [];
 
   final GetCompetitionService _competitionService = GetCompetitionService();
+  final ProfileUserController _profileUserController = ProfileUserController();
 
   bool _isLoading = true;
   String? _errorMessage;
@@ -192,6 +194,12 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
       );
     }
 
+    // get user detail
+    final firstName = _profileUserController.userData?['biodate']?['firstName'];
+    final lastName = _profileUserController.userData?['biodate']?['lastName'];
+    final institutionName =
+        _profileUserController.userData?['biodate']?['institutionName'];
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -266,6 +274,18 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
                 'Selesaikan form registrasi dibawah ini',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
+            ),
+            const SizedBox(height: 20),
+            CustomTextField(
+              labelText: 'Nama Ketua',
+              hintText: '${firstName} ${lastName}',
+              readOnly: true,
+            ),
+            const SizedBox(height: 20),
+            CustomTextField(
+              labelText: 'Nama Institusi',
+              hintText: '$institutionName',
+              readOnly: true,
             ),
             const SizedBox(height: 20),
             CustomTextField(
