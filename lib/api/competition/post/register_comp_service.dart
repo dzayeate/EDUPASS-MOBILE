@@ -56,7 +56,7 @@ class RegisterCompetitionService {
       }
 
       var response = await Dio().post(
-        "http://103.141.61.6/competition/register/peserta",
+        "http://192.168.1.4:3000/competition/register/peserta",
         data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {

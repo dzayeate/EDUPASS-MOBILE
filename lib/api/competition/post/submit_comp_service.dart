@@ -15,7 +15,7 @@ class SubmitCompetitionService {
     try {
       // Create a Map for form data
       var response = await Dio().post(
-        "http://103.141.61.6/competition/submission",
+        "http://192.168.1.4:3000/competition/submission",
         options: Options(
           headers: {
             "Content-Type": "application/json",

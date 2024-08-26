@@ -22,7 +22,7 @@ class GetUserService {
 
     try {
       var response = await Dio().get(
-        "http://103.141.61.6/user/getUser",
+        "http://192.168.1.4:3000/user/getUser",
         queryParameters: {"page": 1, "length": 1, "search": userId},
         options: Options(
           headers: {
@@ -59,7 +59,7 @@ class GetUserService {
   Future<Map<String, dynamic>?> getOrganizer(String userId) async {
     try {
       var response = await Dio().get(
-        "http://103.141.61.6/user/getUser",
+        "http://192.168.1.4:3000/user/getUser",
         queryParameters: {"page": 1, "length": 1, "search": userId},
         options: Options(
           headers: {

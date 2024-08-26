@@ -21,7 +21,7 @@ class AuthService {
   }) async {
     try {
       var response = await Dio().post(
-        "http://103.141.61.6/user/forgot-password",
+        "http://192.168.1.4:3000/user/forgot-password",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -55,7 +55,7 @@ class AuthService {
   }) async {
     try {
       var response = await Dio().post(
-        "http://103.141.61.6/auth/login",
+        "http://192.168.1.4:3000/auth/login",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +132,7 @@ class AuthService {
   }) async {
     try {
       var response = await Dio().post(
-        "http://103.141.61.6/auth/register",
+        "http://192.168.1.4:3000/auth/register",
         data: FormData.fromMap({
           "email": email,
           "password": password,
@@ -263,7 +263,7 @@ class AuthService {
       }
 
       var response = await Dio().put(
-        "http://103.141.61.6/user/update-biodate?id=$bioDateId",
+        "http://192.168.1.4:3000/user/update-biodate?id=$bioDateId",
         data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {
@@ -295,7 +295,7 @@ class AuthService {
     String? token = await tokenManager.getToken();
     try {
       var response = await Dio().post(
-        "http://103.141.61.6/auth/logout",
+        "http://192.168.1.4:3000/auth/logout",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -325,7 +325,7 @@ class AuthService {
     String? token = await tokenManager.getToken();
     try {
       var response = await Dio().post(
-        "http://103.141.61.6/user/change-password",
+        "http://192.168.1.4:3000/user/change-password",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -357,7 +357,7 @@ class AuthService {
     String? token = await tokenManager.getToken();
     try {
       var response = await Dio().post(
-        "http://103.141.61.6/user/change-role",
+        "http://192.168.1.4:3000/user/change-role",
         options: Options(
           headers: {
             "Content-Type": "application/json",

@@ -88,8 +88,8 @@ class CertificationScreen extends StatelessWidget {
                         await File('${tempDir.path}/image.png').create();
                     file.writeAsBytesSync(list);
 
-                    Share.shareFiles([file.path],
-                        text: 'Check out my certificate!');
+                    // Share.shareFiles([file.path],
+                    //     text: 'Check out my certificate!');
                   },
                   icon: const Icon(
                     Icons.share,

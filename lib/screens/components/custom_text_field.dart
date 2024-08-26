@@ -56,7 +56,6 @@ class CustomTextField extends StatelessWidget {
             decoration: InputDecoration(
               labelText: alignLabelWithHint ? labelText : null,
               hintText: hintText,
-              hintStyle: const TextStyle(color: Colors.black),
               alignLabelWithHint: alignLabelWithHint,
               filled: true,
               fillColor:

@@ -8,7 +8,7 @@ class FindCompetitionService {
       String userId) async {
     try {
       final response = await _dio.get(
-        'http://103.141.61.6/competition/findCompetitionRegistration',
+        'http://192.168.1.4:3000/competition/findCompetitionRegistration',
         queryParameters: {
           'page': 1,
           'length': 10,

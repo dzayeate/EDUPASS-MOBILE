@@ -6,7 +6,7 @@ class GetScheduledCompetitionService {
   Future<List<EventModel>> fetchCompetitionEvents() async {
     try {
       final response = await Dio().get(
-        'http://103.141.61.6/competition/findScheduleCompetition',
+        'http://192.168.1.4:3000/competition/findScheduleCompetition',
         queryParameters: {
           'page': 1,
           'length': 10,
