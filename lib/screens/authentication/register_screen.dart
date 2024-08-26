@@ -1,7 +1,7 @@
 import 'package:edupass_mobile/controllers/auth/register_controller.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
 import 'package:edupass_mobile/screens/components/custom_form_field.dart';
-import 'package:edupass_mobile/screens/terms_and_condition/TermsConditionScreen.dart';
+import 'package:edupass_mobile/screens/terms_and_condition/terms_condition_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

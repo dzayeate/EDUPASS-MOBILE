@@ -1,4 +1,4 @@
-import 'package:edupass_mobile/utils/strings/strings.dart';
+import 'package:edupass_mobile/utils/strings/strings_terms_and_condition.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
