@@ -20,8 +20,13 @@ class GetScheduledCompetitionService {
 // Get All Competition ( Pagination )
   Future<List<EventModel>> fetchCompetitionEvents() async {
     try {
+<<<<<<< HEAD
       final response = await _dio.get(
         '${baseUrl}competition/findScheduleCompetition',
+=======
+      final response = await Dio().get(
+        'http://103.141.61.6/competition/findScheduleCompetition',
+>>>>>>> main
         queryParameters: {
           'page': 1,
           'length': 10,

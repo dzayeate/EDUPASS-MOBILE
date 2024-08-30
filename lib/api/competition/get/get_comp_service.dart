@@ -19,7 +19,11 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> getCompetitions(int page, int length) async {
     try {
       final response = await _dio.get(
+<<<<<<< HEAD
         '${baseUrl}competition/findCompetition',
+=======
+        'http://103.141.61.6/competition/findCompetition',
+>>>>>>> main
         queryParameters: {
           'page': page,
           'length': length,
@@ -40,7 +44,11 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> searchCompetitions(String query) async {
     try {
       final response = await _dio.get(
+<<<<<<< HEAD
         '${baseUrl}competition/findCompetition',
+=======
+        'http://103.141.61.6/competition/findCompetition',
+>>>>>>> main
         queryParameters: {
           'page': 1,
           'length': 10,
@@ -62,7 +70,11 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> searchCompetitionsByFilter(String filter) async {
     try {
       final response = await _dio.get(
+<<<<<<< HEAD
         '${baseUrl}competition/findCompetition',
+=======
+        'http://103.141.61.6/competition/findCompetition',
+>>>>>>> main
         queryParameters: {
           'page': 1,
           'length': 5,
@@ -84,7 +96,11 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> getCompetitionDetail(String id) async {
     try {
       final response = await _dio.get(
+<<<<<<< HEAD
         '${baseUrl}competition/findCompetition',
+=======
+        'http://103.141.61.6/competition/findCompetition',
+>>>>>>> main
         queryParameters: {
           'page': 1,
           'length': 1,
