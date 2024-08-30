@@ -1,6 +1,8 @@
 import 'package:edupass_mobile/models/event/event_model.dart';
 import 'package:edupass_mobile/screens/home/detail_comp.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EventDetailPage extends StatelessWidget {
   final EventModel event;
@@ -52,7 +54,7 @@ class EventDetailPage extends StatelessWidget {
                       const Icon(Icons.timelapse, color: Colors.white),
                       const SizedBox(width: 8.0),
                       Text(
-                        'Waktu: , ${event.time}',
+                        'Jam: ${event.time}',
                         style: const TextStyle(color: Colors.white),
                       ),
                     ],
@@ -62,22 +64,37 @@ class EventDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             const Text(
-              'Penjelasan',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8.0),
-            Text(event.description),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Nama Kompetisi',
+              '❁ Penjelasan',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8.0),
             Row(
               children: [
-                const CircleAvatar(
-                  radius: 4,
-                  backgroundColor: Colors.blue,
+                const Padding(
+                  padding: EdgeInsets.only(left: 3.0),
+                  child: CircleAvatar(
+                    radius: 4,
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                Expanded(child: Text(event.description)),
+              ],
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              '❁ Nama Kompetisi',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 3.0),
+                  child: CircleAvatar(
+                    radius: 4,
+                    backgroundColor: Colors.blue,
+                  ),
                 ),
                 const SizedBox(width: 8.0),
                 Text(event.competitionName),
@@ -85,30 +102,71 @@ class EventDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             const Text(
-              'Location',
+              '❁ Location',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8.0),
-            Text(event.location),
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 3.0),
+                  child: CircleAvatar(
+                    radius: 4,
+                    backgroundColor: Colors.blue,
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                Text(event.location),
+              ],
+            ),
             const SizedBox(height: 16.0),
             const Text(
-              'Category',
+              '❁ Category',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8.0),
-            Text(event.category),
-            const SizedBox(height: 16.0),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        DetailCompScreen(id: event.competitionId),
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 3.0),
+                  child: CircleAvatar(
+                    radius: 4,
+                    backgroundColor: Colors.blue,
                   ),
-                );
-              },
-              child: const Text('Menuju ke Detail Lomba'),
+                ),
+                const SizedBox(width: 8.0),
+                Text(event.category),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetailCompScreen(id: event.competitionId),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Menuju ke Detail Lomba',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

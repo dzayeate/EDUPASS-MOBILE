@@ -70,7 +70,7 @@ class _DetailCompScreenState extends State<DetailCompScreen>
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: Color.fromARGB(255, 252, 252, 255),
+            backgroundColor: const Color.fromARGB(255, 252, 252, 255),
             title: const Text(
               'Anda Belum Melakukan Verifikasi',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

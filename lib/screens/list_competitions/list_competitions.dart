@@ -1,5 +1,6 @@
 import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/home/components/event_card.dart';
+import 'package:edupass_mobile/screens/home/components/filter_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,37 @@ class _ListCompetitionsState extends State<ListCompetitions> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // Search Bar
+            TextField(
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  Provider.of<GetCompetitionController>(context, listen: false)
+                      .searchCompetitions(value);
+                } else {
+                  Provider.of<GetCompetitionController>(context, listen: false)
+                      .fetchCompetitions();
+                }
+              },
+              decoration: InputDecoration(
+                hintText: 'Placeholder',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.tune),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => const FilterSheet(),
+                    );
+                  },
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             // Event Cards
             Expanded(
               child: Consumer<GetCompetitionController>(

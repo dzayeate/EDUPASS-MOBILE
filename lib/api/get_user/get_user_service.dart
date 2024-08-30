@@ -1,13 +1,28 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/user_id_manager.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 import 'package:flutter/material.dart';
 
 class GetUserService {
   final TokenManager tokenManager = TokenManager();
   final BiodateIdManager biodateIdManager = BiodateIdManager();
   final UserIdManager userIdManager = UserIdManager();
+
+  final Dio _dio;
+
+  GetUserService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   Future<Map<String, dynamic>?> getUserByBiodateId() async {
     String? biodateId = await biodateIdManager.getBiodateId();
@@ -21,8 +36,8 @@ class GetUserService {
     }
 
     try {
-      var response = await Dio().get(
-        "http://192.168.1.4:3000/user/getUser",
+      var response = await _dio.get(
+        "${baseUrl}user/getUser",
         queryParameters: {"page": 1, "length": 1, "search": userId},
         options: Options(
           headers: {
@@ -58,8 +73,8 @@ class GetUserService {
 // Get Mentor & Sponsor
   Future<Map<String, dynamic>?> getOrganizer(String userId) async {
     try {
-      var response = await Dio().get(
-        "http://192.168.1.4:3000/user/getUser",
+      var response = await _dio.get(
+        "${baseUrl}user/getUser",
         queryParameters: {"page": 1, "length": 1, "search": userId},
         options: Options(
           headers: {

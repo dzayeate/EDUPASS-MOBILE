@@ -9,7 +9,7 @@ class CalendarCompetition extends StatefulWidget {
   const CalendarCompetition({super.key});
 
   @override
-  _CalendarCompetitionState createState() => _CalendarCompetitionState();
+  State<CalendarCompetition> createState() => _CalendarCompetitionState();
 }
 
 class _CalendarCompetitionState extends State<CalendarCompetition> {
@@ -45,6 +45,8 @@ class _CalendarCompetitionState extends State<CalendarCompetition> {
 
   @override
   Widget build(BuildContext context) {
+    final events = _getEventsForDay(_selectedDay);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -72,34 +74,66 @@ class _CalendarCompetitionState extends State<CalendarCompetition> {
             },
             eventLoader: _getEventsForDay,
           ),
-          const SizedBox(height: 8.0),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _getEventsForDay(_selectedDay).length,
-              itemBuilder: (context, index) {
-                final event = _getEventsForDay(_selectedDay)[index];
-                return Column(
-                  children: [
-                    const Text("List Events"),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ListTile(
-                      title: Text(event.title),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EventDetailPage(event: event),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                );
-              },
+          const SizedBox(height: 16.0),
+          Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            decoration: BoxDecoration(
+              color: Colors.indigo,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: const Text(
+              "List Events",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
+          const SizedBox(height: 8.0),
+          if (events.isNotEmpty)
+            Expanded(
+              child: ListView.builder(
+                itemCount: events.length,
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  const SizedBox(height: 16.0);
+                  return ListTile(
+                    title: Text("❁  ${event.title}"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventDetailPage(event: event),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            )
+          else
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/empty-box.png',
+                    width: 150,
+                    height: 150,
+                  ),
+                  const SizedBox(height: 16.0),
+                  const Text(
+                    "Belum Ada Event Hari Ini",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 48, 48, 48),
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
