@@ -204,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           const SizedBox(width: 20),
                           IconButton(
-                            icon: Image.asset('assets/icons/facebook.png'),
+                            icon: Image.asset('assets/icons/kunci-logo.png'),
                             onPressed: () {},
                           ),
                         ],

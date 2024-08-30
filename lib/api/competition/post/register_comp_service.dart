@@ -1,13 +1,28 @@
+import 'dart:io';
+
+import 'package:dio/io.dart';
 import 'package:mime/mime.dart';
 import 'package:dio/dio.dart';
 import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 
 class RegisterCompetitionService {
   final TokenManager tokenManager = TokenManager();
   final BiodateIdManager biodateIdManager = BiodateIdManager();
+
+  final Dio _dio;
+
+  RegisterCompetitionService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   // register competition
   Future<bool> registerCompetition({
@@ -55,8 +70,8 @@ class RegisterCompetitionService {
         }
       }
 
-      var response = await Dio().post(
-        "http://192.168.1.4:3000/competition/register/peserta",
+      var response = await _dio.post(
+        "${baseUrl}competition/register/peserta",
         data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {

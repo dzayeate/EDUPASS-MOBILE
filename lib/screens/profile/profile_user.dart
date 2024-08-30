@@ -57,6 +57,12 @@ class ProfileUser extends StatelessWidget {
                     userImage = null;
                   }
 
+                  // Pengecekan role dan isVerified
+                  final isRoleUmum =
+                      controller.userData?['role']['name'] == 'Umum';
+                  final isVerified =
+                      !isRoleUmum && controller.userData?['isVerified'] == true;
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -135,51 +141,42 @@ class ProfileUser extends StatelessWidget {
                                         const SizedBox(
                                           width: 16,
                                         ),
-                                        if (controller
-                                                .userData?['isVerified'] !=
-                                            null)
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 4),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  controller.userData?[
-                                                              'isVerified'] ==
-                                                          true
-                                                      ? const Color.fromARGB(
-                                                          255, 188, 229, 249)
-                                                      : Color.fromARGB(
-                                                          255, 251, 214, 227),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                color: controller.userData?[
-                                                            'isVerified'] ==
-                                                        true
-                                                    ? const Color.fromARGB(
-                                                        255, 108, 167, 255)
-                                                    : Color.fromARGB(
-                                                        255, 245, 99, 177)!,
-                                                width:
-                                                    2, // Set the width of the border
-                                              ),
-                                            ),
-                                            child: Text(
-                                              controller.userData?[
-                                                          'isVerified'] ==
-                                                      true
-                                                  ? 'Verified'
-                                                  : 'Not Verified',
-                                              style: TextStyle(
-                                                color: controller.userData?[
-                                                            'isVerified'] ==
-                                                        true
-                                                    ? Colors.indigo
-                                                    : Colors.red[900],
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        // if (controller
+                                        //         .userData?['isVerified'] !=
+                                        //     null)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: isVerified
+                                                ? const Color.fromARGB(
+                                                    255, 188, 229, 249)
+                                                : const Color.fromARGB(
+                                                    255, 251, 214, 227),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: isVerified
+                                                  ? const Color.fromARGB(
+                                                      255, 108, 167, 255)
+                                                  : const Color.fromARGB(
+                                                      255, 245, 99, 177),
+                                              width:
+                                                  2, // Set the width of the border
                                             ),
                                           ),
+                                          child: Text(
+                                            isVerified
+                                                ? 'Verified'
+                                                : 'Not Verified',
+                                            style: TextStyle(
+                                              color: isVerified
+                                                  ? Colors.indigo
+                                                  : Colors.red[900],
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(

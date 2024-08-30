@@ -1,12 +1,25 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 
 class GetCompetitionService {
-  final Dio _dio = Dio();
+  final Dio _dio;
+
+  GetCompetitionService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   Future<Map<String, dynamic>> getCompetitions(int page, int length) async {
     try {
       final response = await _dio.get(
-        'http://192.168.1.4:3000/competition/findCompetition',
+        '${baseUrl}competition/findCompetition',
         queryParameters: {
           'page': page,
           'length': length,
@@ -27,7 +40,7 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> searchCompetitions(String query) async {
     try {
       final response = await _dio.get(
-        'http://192.168.1.4:3000/competition/findCompetition',
+        '${baseUrl}competition/findCompetition',
         queryParameters: {
           'page': 1,
           'length': 10,
@@ -49,7 +62,7 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> searchCompetitionsByFilter(String filter) async {
     try {
       final response = await _dio.get(
-        'http://192.168.1.4:3000/competition/findCompetition',
+        '${baseUrl}competition/findCompetition',
         queryParameters: {
           'page': 1,
           'length': 5,
@@ -71,7 +84,7 @@ class GetCompetitionService {
   Future<Map<String, dynamic>> getCompetitionDetail(String id) async {
     try {
       final response = await _dio.get(
-        'http://192.168.1.4:3000/competition/findCompetition',
+        '${baseUrl}competition/findCompetition',
         queryParameters: {
           'page': 1,
           'length': 1,

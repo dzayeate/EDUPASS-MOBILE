@@ -1,9 +1,23 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:edupass_mobile/api/competition/post/register_comp_service.dart';
+import 'package:dio/io.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 
 class SubmitCompetitionService {
   final TokenManager tokenManager = TokenManager();
+
+  final Dio _dio;
+
+  SubmitCompetitionService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   // register competition
   Future<bool> submitCompetition({
@@ -14,8 +28,8 @@ class SubmitCompetitionService {
 
     try {
       // Create a Map for form data
-      var response = await Dio().post(
-        "http://192.168.1.4:3000/competition/submission",
+      var response = await _dio.post(
+        "${baseUrl}competition/submission",
         options: Options(
           headers: {
             "Content-Type": "application/json",
