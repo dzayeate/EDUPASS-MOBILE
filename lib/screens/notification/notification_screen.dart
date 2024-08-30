@@ -23,17 +23,6 @@ class NotificationScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EduPassApp(initialPageIndex: 0),
-              ),
-            );
-          },
-        ),
         title: Text(
           'Notifikasi',
           style: GoogleFonts.poppins(

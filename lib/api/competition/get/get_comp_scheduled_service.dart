@@ -1,12 +1,32 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:edupass_mobile/models/event/event_model.dart';
+import 'package:flutter/material.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 
 class GetScheduledCompetitionService {
+  final Dio _dio;
+
+  GetScheduledCompetitionService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 // Get All Competition ( Pagination )
   Future<List<EventModel>> fetchCompetitionEvents() async {
     try {
+<<<<<<< HEAD
+      final response = await _dio.get(
+        '${baseUrl}competition/findScheduleCompetition',
+=======
       final response = await Dio().get(
         'http://103.141.61.6/competition/findScheduleCompetition',
+>>>>>>> main
         queryParameters: {
           'page': 1,
           'length': 10,
@@ -24,7 +44,7 @@ class GetScheduledCompetitionService {
 
       return events;
     } catch (e) {
-      print('Error fetching competition events: $e');
+      debugPrint('Error fetching competition events: $e');
       return [];
     }
   }

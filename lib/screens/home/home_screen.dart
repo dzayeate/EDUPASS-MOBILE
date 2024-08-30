@@ -67,15 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .fetchCompetitions();
     });
 
-    return
-        // WillPopScope(
-        //   onWillPop: () async {
-        //     // Menangani ketika tombol back ditekan
-        //     SystemNavigator.pop(); // Keluar dari aplikasi
-        //     return true;
-        //   },
-        //   child:
-        WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         // Menangani ketika tombol back ditekan
         SystemNavigator.pop(); // Keluar dari aplikasi

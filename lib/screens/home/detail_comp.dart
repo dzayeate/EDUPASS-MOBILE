@@ -70,7 +70,11 @@ class _DetailCompScreenState extends State<DetailCompScreen>
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Anda Belum Melakukan Verifikasi'),
+            backgroundColor: const Color.fromARGB(255, 252, 252, 255),
+            title: const Text(
+              'Anda Belum Melakukan Verifikasi',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             content:
                 const Text('Apakah Anda ingin Melakukan Verifikasi sekarang?'),
             actions: [
@@ -78,7 +82,8 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Batal'),
+                child:
+                    const Text('Batal', style: TextStyle(color: Colors.indigo)),
               ),
               TextButton(
                 onPressed: () {
@@ -90,7 +95,8 @@ class _DetailCompScreenState extends State<DetailCompScreen>
                         builder: (context) => const ChooseRoleScreen()),
                   );
                 },
-                child: const Text('Ganti Role'),
+                child: const Text('Ganti Role',
+                    style: TextStyle(color: Colors.indigo)),
               ),
             ],
           );

@@ -22,6 +22,14 @@ class _LoginScreenState extends State<LoginScreen> {
     _controller = LoginController();
   }
 
+  bool _showErrors = false;
+
+  void _updateState() {
+    setState(() {
+      _showErrors = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,17 +75,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        CustomFormField(
+                        CustomLoginField(
                           controller: _controller.emailController,
                           labelText: 'Email',
                           validator: emailValidator,
+                          showError: _showErrors,
                         ),
                         const SizedBox(height: 20),
-                        CustomFormField(
+                        CustomLoginField(
                           controller: _controller.passwordController,
                           labelText: 'Password',
                           isPassword: true,
                           validator: passwordValidator,
+                          showError: _showErrors,
                         ),
                         const SizedBox(height: 10),
                         Align(
@@ -94,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               'Forgot Password',
                               style: GoogleFonts.poppins(
-                                color: Colors.black,
+                                color: Colors.indigo,
                               ),
                             ),
                           ),
@@ -104,17 +114,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              _controller.login(context);
+                              _updateState();
+                              _controller.login(context, _showErrors);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigo,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
                             child: Text(
-                              'Login',
+                              'Log In',
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -143,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(width: 20),
                             IconButton(
-                              icon: Image.asset('assets/icons/facebook.png'),
+                              icon: Image.asset('assets/icons/kunci-logo.png'),
                               onPressed: () {},
                             ),
                           ],

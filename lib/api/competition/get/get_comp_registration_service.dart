@@ -1,14 +1,27 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:edupass_mobile/models/event/comp_registration_model.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 
 class FindCompetitionService {
-  final Dio _dio = Dio();
+  final Dio _dio;
+
+  FindCompetitionService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   Future<List<CompetitionRegistration>> fetchRegistrations(
       String userId) async {
     try {
       final response = await _dio.get(
-        'http://103.141.61.6/competition/findCompetitionRegistration',
+        '${baseUrl}competition/findCompetitionRegistration',
         queryParameters: {
           'page': 1,
           'length': 10,

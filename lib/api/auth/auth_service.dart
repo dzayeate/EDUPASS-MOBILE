@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/io.dart';
 import 'package:edupass_mobile/api/shared_preferences/user_id_manager.dart';
 import 'package:mime/mime.dart';
 import 'package:dio/dio.dart';
@@ -5,6 +8,7 @@ import 'package:edupass_mobile/api/shared_preferences/biodate_id_manager.dart';
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:edupass_mobile/utils/constant.dart';
 
 class AuthService {
   static String? token;
@@ -15,13 +19,24 @@ class AuthService {
   final BiodateIdManager biodateIdManager = BiodateIdManager();
   final UserIdManager userIdManager = UserIdManager();
 
+  final Dio _dio;
+
+  AuthService() : _dio = Dio() {
+    (_dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
+
 // forget password
   Future<bool> forgetPassword({
     required String email,
   }) async {
     try {
-      var response = await Dio().post(
-        "http://103.141.61.6/user/forgot-password",
+      var response = await _dio.post(
+        "${baseUrl}user/forgot-password",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -54,8 +69,8 @@ class AuthService {
     required String password,
   }) async {
     try {
-      var response = await Dio().post(
-        "http://103.141.61.6/auth/login",
+      var response = await _dio.post(
+        "${baseUrl}auth/login",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -131,8 +146,8 @@ class AuthService {
     required String proof,
   }) async {
     try {
-      var response = await Dio().post(
-        "http://103.141.61.6/auth/register",
+      var response = await _dio.post(
+        "${baseUrl}auth/register",
         data: FormData.fromMap({
           "email": email,
           "password": password,
@@ -262,8 +277,8 @@ class AuthService {
         }
       }
 
-      var response = await Dio().put(
-        "http://103.141.61.6/user/update-biodate?id=$bioDateId",
+      var response = await _dio.put(
+        "${baseUrl}user/update-biodate?id=$bioDateId",
         data: FormData.fromMap(formDataMap),
         options: Options(
           headers: {
@@ -294,8 +309,8 @@ class AuthService {
   Future<void> logout() async {
     String? token = await tokenManager.getToken();
     try {
-      var response = await Dio().post(
-        "http://103.141.61.6/auth/logout",
+      var response = await _dio.post(
+        "${baseUrl}auth/logout",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -324,8 +339,8 @@ class AuthService {
   }) async {
     String? token = await tokenManager.getToken();
     try {
-      var response = await Dio().post(
-        "http://103.141.61.6/user/change-password",
+      var response = await _dio.post(
+        "${baseUrl}user/change-password",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -356,8 +371,8 @@ class AuthService {
   }) async {
     String? token = await tokenManager.getToken();
     try {
-      var response = await Dio().post(
-        "http://103.141.61.6/user/change-role",
+      var response = await _dio.post(
+        "${baseUrl}user/change-role",
         options: Options(
           headers: {
             "Content-Type": "application/json",
