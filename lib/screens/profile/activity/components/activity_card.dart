@@ -58,7 +58,7 @@ class SubmissionActivityCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tanggal: $date',
+              'Tanggal : $date',
               style: const TextStyle(fontSize: 14, color: Colors.black),
             ),
             if (isTeam) ...[

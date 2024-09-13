@@ -1,6 +1,6 @@
 import 'package:edupass_mobile/controllers/auth/change_password_controller.dart';
 import 'package:edupass_mobile/screens/components/custom_form_field.dart';
-import 'package:edupass_mobile/screens/profile/settings/setting_screen.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -79,6 +79,28 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       newPasswordError == null &&
                       confirmPasswordError == null) {
                     _changePassController.changePassword(context);
+                  } else {
+                    final snackBar = SnackBar(
+                      /// need to set following properties for best effect of awesome_snackbar_content
+                      elevation: 0,
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.transparent,
+                      content: Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 70),
+                        child: AwesomeSnackbarContent(
+                          titleFontSize: 17,
+                          messageFontSize: 15,
+                          title: 'Perhatian!',
+                          message:
+                              'Harap isi kolom input password dengan benar.',
+                          contentType: ContentType.warning,
+                        ),
+                      ),
+                    );
+
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(snackBar);
                   }
                 },
                 style: ElevatedButton.styleFrom(

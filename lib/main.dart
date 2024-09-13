@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:edupass_mobile/api/shared_preferences/token_manager.dart';
 import 'package:edupass_mobile/controllers/competition/get/get_comp_controller.dart';
 import 'package:edupass_mobile/screens/authentication/login_screen.dart';
@@ -8,6 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
+
   WidgetsFlutterBinding.ensureInitialized();
 
   bool loggedIn = await TokenManager().isLoggedIn();
@@ -47,12 +51,22 @@ class MyApp extends StatelessWidget {
         routerDelegate: _router.routerDelegate,
         routeInformationParser: _router.routeInformationParser,
         routeInformationProvider: _router.routeInformationProvider,
-        title: 'MyApp',
+        title: 'EduPas',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme: GoogleFonts.poppinsTextTheme(),
         ),
       ),
     );
+  }
+}
+
+// Hanya untuk Testing
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

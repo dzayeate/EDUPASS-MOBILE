@@ -141,6 +141,11 @@ class _ListCompetitionsState extends State<ListCompetitions> {
                             }
                             final competition =
                                 competitionController.competitions[index];
+                            // Mendapatkan previewUrl dan melakukan validasi
+                            final String? previewUrl =
+                                competition['thumbnail']['previewUrl'] != "null"
+                                    ? competition['thumbnail']['previewUrl']
+                                    : null;
                             return EventCard(
                               id: competition['id'],
                               title: competition['name'],
@@ -153,8 +158,12 @@ class _ListCompetitionsState extends State<ListCompetitions> {
                                   'category'], // Data ini tidak ada di API
                               labelTwo: competition[
                                   'platform'], // Data ini tidak ada di API
-                              imageUrl:
-                                  'assets/images/competition_1.png', // Adjust image asset
+                              imageUrl: previewUrl != null
+                                  ? previewUrl.replaceFirst(
+                                      "localhost", "192.168.1.4")
+                                  : null,
+                              // imageUrl:
+                              //     'assets/images/competition_1.png', // Adjust image asset
 
                               // imageUrl: competition['banner'] != null &&
                               //         competition['banner'].isNotEmpty

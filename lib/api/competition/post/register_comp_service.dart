@@ -99,7 +99,7 @@ class RegisterCompetitionService {
       if (e.response?.statusCode == 400) {
         throw Exception(e.response?.data['message']);
       } else {
-        throw Exception('Failed to Register Competition');
+        throw Exception('${e.response?.data['message']}');
       }
     }
   }

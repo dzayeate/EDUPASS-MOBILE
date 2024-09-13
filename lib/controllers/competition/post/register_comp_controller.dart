@@ -30,8 +30,13 @@ class RegisterCompetitionController {
     // Dispose other controllers
   }
 
-  Future<void> register(BuildContext context, String competitionId, bool isTeam,
-      int teamSize, List<TextEditingController> anggotaControllers) async {
+  Future<void> register(
+      BuildContext context,
+      String competitionId,
+      bool isTeam,
+      int teamSize,
+      List<TextEditingController> anggotaControllers,
+      String emailTeamLeader) async {
     // Tampilkan loading dialog
     DialogHelper.showLoading(context);
 
@@ -43,6 +48,13 @@ class RegisterCompetitionController {
     List<String> teamMembers =
         anggotaControllers.map((controller) => controller.text.trim()).toList();
 
+    // if (isTeam) {
+    //   // Tambahkan Ketua Tim sebagai anggota pertama
+    //   teamMembers.insert(0, emailTeamLeader);
+    //   // // Tambahkan 1 ke teamSize untuk menghitung ketua tim
+    //   // teamSize += 1;
+    // }
+
     try {
       bool registeredComp = await _service.registerCompetition(
         competitionId: competitionId,
@@ -51,7 +63,7 @@ class RegisterCompetitionController {
         phoneNumber: phone,
         isTeam: isTeam,
         teamName: teamName,
-        teamSize: teamSize,
+        teamSize: teamMembers.length + 1,
         teamMembers: teamMembers,
       );
       // Sembunyikan loading dialog setelah selesai
@@ -125,7 +137,7 @@ class RegisterCompetitionController {
           ),
           child: AwesomeSnackbarContent(
             titleFontSize: 17,
-            messageFontSize: 15,
+            messageFontSize: 12,
             title: 'Oh Snap!',
             message: '$e',
             contentType: ContentType.failure,

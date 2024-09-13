@@ -56,7 +56,7 @@ class _SubmissionTabState extends State<SubmissionTab> {
                     .toString()
                     .substring(0, 10),
                 isTeam: registration.isTeam,
-                phoneNumber: 'Nomor HP ${registration.phoneNumber}',
+                phoneNumber: 'Nomor HP : ${registration.phoneNumber}',
                 teamSize: registration.teamSize,
                 firstButtonLabel: 'Detail Competisi',
                 secondButtonLabel: 'Kumpulkan Tugas',

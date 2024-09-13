@@ -195,6 +195,7 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
     }
 
     // get user detail
+    final emailTeamLeader = _profileUserController.userData?['email'];
     final firstName = _profileUserController.userData?['biodate']?['firstName'];
     final lastName = _profileUserController.userData?['biodate']?['lastName'];
     final institutionName =
@@ -417,7 +418,8 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                int maxAnggota = int.tryParse(controller.teamSize.text) ?? 0;
+                int maxAnggota = (int.tryParse(controller.teamSize.text) ?? 0) +
+                    1; // Tambahkan 1 untuk Ketua Tim
                 if (isTeam && controller.nameTeam.text.trim().isEmpty) {
                   final snackBar = SnackBar(
                     elevation: 0,
@@ -443,12 +445,25 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
 
                 if (isInfoChecked &&
                     isAgreeChecked &&
-                    (anggotaFields.length == maxAnggota || !isTeam)) {
+                    (anggotaFields.length == (maxAnggota - 1))) {
+                  // Jika semua validasi terpenuhi, tambahkan ketua tim ke dalam anggota tim
+                  List<String> teamMembers = anggotaControllers
+                      .map((controller) => controller.text.trim())
+                      .toList();
+                  teamMembers.insert(0,
+                      emailTeamLeader!); // Tambahkan Ketua Tim sebagai anggota pertama
+
                   Navigator.pop(
                     context,
                   );
-                  controller.register(context, widget.id, isTeam,
-                      anggotaFields.length, anggotaControllers);
+                  controller.register(
+                    context,
+                    widget.id,
+                    isTeam,
+                    anggotaFields.length + 1, // Tambahkan 1 untuk Ketua Tim
+                    anggotaControllers,
+                    emailTeamLeader, // Memasukkan id ketua tim
+                  );
                 } else {
                   // String message =
                   //     'You must accept the terms and conditions to proceed.';
@@ -474,7 +489,7 @@ class _CompetitionMhsRegisState extends State<CompetitionMhsRegis> {
                     ..hideCurrentSnackBar()
                     ..showSnackBar(snackBar);
 
-                  if (isTeam && anggotaFields.length != maxAnggota) {
+                  if (isTeam && anggotaFields.length != (maxAnggota - 1)) {
                     // message =
                     //     'Jumlah anggota harus sesuai dengan yang diisi di kolom jumlah anggota.';
                     final snackBar = SnackBar(

@@ -80,19 +80,6 @@ class ProfileUser extends StatelessWidget {
                             end: Alignment.bottomRight,
                           ),
                         ),
-                        // child: Padding(
-                        //   padding: const EdgeInsets.all(16.0),
-                        //   child: Align(
-                        //     alignment: Alignment.topLeft,
-                        //     child: IconButton(
-                        //       icon: const Icon(Ionicons.arrow_back),
-                        //       color: Colors.white,
-                        //       onPressed: () {
-                        //         // Handle back button press
-                        //       },
-                        //     ),
-                        //   ),
-                        // ),
                       ),
                       Transform.translate(
                         offset: const Offset(0, -50),
